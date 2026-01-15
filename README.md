@@ -4,7 +4,7 @@ This repository contains my personal NixOS configuration files for various setup
 
 ## homura
 
-Server: an i3-6100.  
+Server: a Dell Optiplex 3040 with an i3-6100.  
 Configured to host a few services with Docker.  
 Runs on the hardened kernel.
 

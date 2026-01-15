@@ -56,8 +56,8 @@
     fastfetch
     git
     ibus
-    ibus-anthy
-    ibus-m17n
+    ibus-engines.anthy
+    ibus-engines.m17n
     ibus-engines.mozc
     kdePackages.partitionmanager
     lm_sensors
