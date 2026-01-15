@@ -26,6 +26,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    docker-compose
     fastfetch
     git
     lm_sensors
@@ -48,11 +49,17 @@
       autosuggestions.enable = true;
       enable = true;
       enableCompletion = true;
+
+      interactiveShellInit = ''
+        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+      '';
+
       ohMyZsh = {
         enable = true;
-        plugins = [ "fzf-tab" "git" ];
+        plugins = [ "git" ];
         theme = "robbyrussell";
       };
+
       shellAliases = {
         cln = "sudo nix-collect-garbage -d && sudo nix-store --gc && sudo nix-store --optimise && sudo nixos-rebuild boot";
         ff  = "fastfetch";
@@ -61,6 +68,7 @@
         lla = "ls -la";
         upd = "sudo nixos-rebuild switch && sudo nix-channel --update && sudo nixos-rebuild switch --upgrade";
       };
+
       syntaxHighlighting.enable = true;
     };
   };
@@ -82,5 +90,23 @@
     extraGroups = [ "networkmanager" "wheel" ];
     isNormalUser = true;
     shell = pkgs.zsh;
+  };
+
+  virtualisation.docker = {
+    daemon.settings = {
+      default-address-pools = [
+        {
+          base = "192.168.145.0/8";
+          size = 16;
+        }
+      ];
+      dns = [ "9.9.9.9" ];
+      storage-driver = "overlay2";
+    };
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
   };
 }

@@ -4,9 +4,9 @@ This repository contains my personal NixOS configuration files for various setup
 
 ## homura
 
-Temporary server running on an i3-6100.  
-Configured to host a few services.  
-Runs a hardened kernel.
+Server: an i3-6100.  
+Configured to host a few services with Docker.  
+Runs on the hardened kernel.
 
 ## ui
 
