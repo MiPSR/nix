@@ -55,6 +55,10 @@
     alsa-utils
     fastfetch
     git
+    ibus
+    ibus-anthy
+    ibus-m17n
+    ibus-engines.mozc
     kdePackages.partitionmanager
     lm_sensors
     neovim
@@ -107,11 +111,6 @@
       LC_TELEPHONE = "fr_FR.UTF-8";
       LC_TIME = "fr_FR.UTF-8";
     };
-    inputMethod = {
-      enable = true;
-      ibus.engines = with pkgs.ibus-engines; [ mozc ];
-      type = "ibus";
-    };
   };
 
 
@@ -137,9 +136,13 @@
       enable = true;
       enableCompletion = true;
 
+      interactiveShellInit = ''
+        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+      '';
+
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "fzf-tab" ];
+        plugins = [ "git" ];
         theme = "robbyrussell";
       };
 
@@ -213,7 +216,6 @@
     isNormalUser = true;
     packages = with pkgs; [
       android-tools
-      discord
       google-chrome
       heroic
       kdePackages.kate
@@ -226,7 +228,7 @@
       steam
       thunderbird-bin
       vesktop
-      wlx-overlay-s
+      wayvr
     ];
     shell = pkgs.zsh;
   };
