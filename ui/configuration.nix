@@ -176,15 +176,6 @@
     printing.enable = true;
 
     wivrn.enable = true;
-
-    xserver = {
-      enable = true;
-
-      xkb = {
-        layout = "us";
-        variant = "intl";
-      };
-    };
   };
 
   system = {
