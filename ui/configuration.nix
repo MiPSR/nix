@@ -55,10 +55,6 @@
     alsa-utils
     fastfetch
     git
-    ibus
-    ibus-engines.anthy
-    ibus-engines.m17n
-    ibus-engines.mozc
     kdePackages.partitionmanager
     lm_sensors
     neovim
@@ -111,8 +107,19 @@
       LC_TELEPHONE = "fr_FR.UTF-8";
       LC_TIME = "fr_FR.UTF-8";
     };
+    inputMethod = {
+      type = "fcitx5";
+      enable = true;
+      fcitx5 = {
+        addons = with pkgs; [
+          fcitx5-gtk
+          fcitx5-hangul
+          fcitx5-mozc
+        ];
+        waylandFrontend = true;
+      };
+    };
   };
-
 
   imports = [
     ./hardware-configuration.nix
