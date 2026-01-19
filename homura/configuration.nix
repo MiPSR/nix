@@ -62,9 +62,9 @@
 
       shellAliases = {
         cln = "sudo nix-collect-garbage -d && sudo nix-store --gc && sudo nix-store --optimise && sudo nixos-rebuild boot";
-        ff  = "fastfetch";
-        la  = "ls -a";
-        ll  = "ls -l";
+        ff = "fastfetch";
+        la = "ls -a";
+        ll = "ls -l";
         lla = "ls -la";
         upd = "sudo nixos-rebuild switch && sudo nix-channel --update && sudo nixos-rebuild switch --upgrade";
       };

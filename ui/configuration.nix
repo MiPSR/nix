@@ -4,6 +4,14 @@
   boot = {
     consoleLogLevel = 3;
 
+    extraModprobeConfig = ''
+      options v4l2loopback exclusive_caps=1 card_label="Virtual Webcam"
+    '';
+
+    extraModulePackages = with config.boot.kernelPackages; [
+      v4l2loopback
+    ];
+
     initrd = {
       systemd.enable = true;
       verbose = false;
@@ -41,15 +49,27 @@
   };
 
   console = {
-      colors = [
-        "2f3136" "7f0000" "007f00" "666655"
-        "555a66" "665566" "556666" "ffffff"
-        "4f5258" "ff0000" "00ff00" "aaaa88"
-        "888fa6" "aa88aa" "88aaaa" "e6e6e6"
-      ];
-      earlySetup = true;
-      keyMap = "us-acentos";
-    };
+    colors = [
+      "2f3136"
+      "7f0000"
+      "007f00"
+      "666655"
+      "555a66"
+      "665566"
+      "556666"
+      "ffffff"
+      "4f5258"
+      "ff0000"
+      "00ff00"
+      "aaaa88"
+      "888fa6"
+      "aa88aa"
+      "88aaaa"
+      "e6e6e6"
+    ];
+    earlySetup = true;
+    keyMap = "us-acentos";
+  };
 
   environment.systemPackages = with pkgs; [
     alsa-utils
@@ -58,7 +78,9 @@
     kdePackages.partitionmanager
     lm_sensors
     neovim
+    nixpkgs-fmt
     p7zip
+    v4l-utils
     zsh-fzf-tab
   ];
 
@@ -67,10 +89,10 @@
 
     fontconfig = {
       defaultFonts = {
-        emoji      = [ "Twemoji Color Font" ];
+        emoji = [ "Twemoji Color Font" ];
         monospace = [ "IBM Plex Mono" ];
         sansSerif = [ "IBM Plex Sans" ];
-        serif     = [ "Source Han Sans JP" ];
+        serif = [ "Source Han Sans JP" ];
       };
       enable = true;
     };
@@ -135,9 +157,11 @@
   programs = {
     appimage.enable = true;
     appimage.binfmt = true;
-    appimage.package = pkgs.appimage-run.override { extraPkgs = pkgs: [
-      pkgs.python312
-    ]; };
+    appimage.package = pkgs.appimage-run.override {
+      extraPkgs = pkgs: [
+        pkgs.python312
+      ];
+    };
     zsh = {
       autosuggestions.enable = true;
       enable = true;
@@ -145,6 +169,7 @@
 
       interactiveShellInit = ''
         source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+        cam() { scrcpy --camera-size=1280x720 --max-fps=30 --no-audio --no-playback --render-driver=vulkan --v4l2-sink=/dev/video0 --video-codec=h265 --video-encoder=OMX.qcom.video.encoder.hevc --video-source=camera --camera-id="$1"; }
       '';
 
       ohMyZsh = {
@@ -155,10 +180,11 @@
 
       shellAliases = {
         cln = "sudo nix-collect-garbage -d && sudo nix-store --gc && sudo nix-store --optimise && sudo nixos-rebuild boot";
-        ff  = "fastfetch";
-        la  = "ls -a";
-        ll  = "ls -l";
+        ff = "fastfetch";
+        la = "ls -a";
+        ll = "ls -l";
         lla = "ls -la";
+        phn = "scrcpy --max-fps=60 --stay-awake --turn-screen-off --render-driver=vulkan --video-codec=h264 --video-encoder=OMX.qcom.video.encoder.avc";
         upd = "sudo nixos-rebuild switch && sudo nix-channel --update && sudo nixos-rebuild switch --upgrade";
       };
 
@@ -213,6 +239,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
     isNormalUser = true;
     packages = with pkgs; [
+      alvr
       android-tools
       google-chrome
       heroic
