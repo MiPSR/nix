@@ -73,14 +73,18 @@
 
   environment.systemPackages = with pkgs; [
     alsa-utils
+    android-tools
     fastfetch
+    ffmpeg
     git
-    kdePackages.partitionmanager
+    gnupg
     lm_sensors
     neovim
     nixpkgs-fmt
     p7zip
+    scrcpy
     v4l-utils
+    wl-clipboard
     zsh-fzf-tab
   ];
 
@@ -91,8 +95,8 @@
       defaultFonts = {
         emoji = [ "Twemoji Color Font" ];
         monospace = [ "IBM Plex Mono" ];
-        sansSerif = [ "IBM Plex Sans" ];
-        serif = [ "Source Han Sans JP" ];
+        sansSerif = [ "IBM Plex Sans" "Source Han Sans" ];
+        serif = [ "IBM Plex Serif" "Source Han Serif" ];
       };
       enable = true;
     };
@@ -100,6 +104,7 @@
     packages = with pkgs; [
       ibm-plex
       source-han-sans
+      source-han-serif
       twemoji-color-font
     ];
   };
@@ -109,8 +114,19 @@
     graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = with pkgs; [ libva libva-vdpau-driver mesa ];
-      extraPackages32 = with pkgs.driversi686Linux; [ mesa ];
+      extraPackages = with pkgs; [
+        gst_all_1.gst-vaapi
+        libva
+        libva-vdpau-driver
+        libvdpau-va-gl
+        libvpx
+        mesa
+      ];
+      extraPackages32 = with pkgs.driversi686Linux; [
+        libva-vdpau-driver
+        libvdpau-va-gl
+        mesa
+      ];
     };
 
     steam-hardware.enable = true;
@@ -135,7 +151,6 @@
       fcitx5 = {
         addons = with pkgs; [
           fcitx5-gtk
-          fcitx5-hangul
           fcitx5-mozc
         ];
         waylandFrontend = true;
@@ -162,6 +177,12 @@
         pkgs.python312
       ];
     };
+
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+
     zsh = {
       autosuggestions.enable = true;
       enable = true;
@@ -195,9 +216,22 @@
   security.rtkit.enable = true;
 
   services = {
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        userServices = true;
+      };
+    };
+
     desktopManager.plasma6.enable = true;
 
     displayManager.sddm.enable = true;
+
+    flatpak.enable = true;
 
     pipewire = {
       alsa.enable = true;
@@ -207,8 +241,6 @@
     };
 
     printing.enable = true;
-
-    wivrn.enable = true;
   };
 
   system = {
@@ -223,12 +255,22 @@
     };
   };
 
-  systemd.services.fix-suspend-gpp0 = {
-    description = "Disable GPP0 ACPI wakeup";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'echo GPP0 > /proc/acpi/wakeup'";
+  systemd.services = {
+    fix-suspend-gpp0 = {
+      description = "Disable GPP0 ACPI wakeup";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.bash}/bin/bash -c 'echo GPP0 > /proc/acpi/wakeup'";
+      };
+    };
+
+    flatpak-repo = {
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.flatpak ];
+      script = ''
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      '';
     };
   };
 
@@ -238,23 +280,6 @@
     description = "M";
     extraGroups = [ "networkmanager" "wheel" ];
     isNormalUser = true;
-    packages = with pkgs; [
-      alvr
-      android-tools
-      google-chrome
-      heroic
-      kdePackages.kate
-      librewolf
-      microsoft-edge
-      mpc-qt
-      obs-studio
-      osu-lazer-bin
-      scrcpy
-      steam
-      thunderbird-bin
-      vesktop
-      wayvr
-    ];
     shell = pkgs.zsh;
   };
 }
