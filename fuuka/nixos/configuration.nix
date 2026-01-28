@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ./hardware-configuration.nix ];
+
   boot = {
     consoleLogLevel = 3;
 
@@ -42,34 +44,13 @@
 
     plymouth = {
       enable = true;
-      font = "${pkgs.hack-font}/share/fonts/truetype/Hack-Regular.ttf";
-      logo = "${pkgs.nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png";
+      font = "${pkgs.ibm-plex}/share/fonts/opentype/IBMPlexMono-Regular.otf";
+      logo = "${pkgs.nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake-white.png";
       theme = "bgrt";
     };
   };
 
-  console = {
-    colors = [
-      "2f3136"
-      "7f0000"
-      "007f00"
-      "666655"
-      "555a66"
-      "665566"
-      "556666"
-      "ffffff"
-      "4f5258"
-      "ff0000"
-      "00ff00"
-      "aaaa88"
-      "888fa6"
-      "aa88aa"
-      "88aaaa"
-      "e6e6e6"
-    ];
-    earlySetup = true;
-    keyMap = "us-acentos";
-  };
+  console.keyMap = "us-acentos";
 
   environment = {
     sessionVariables.NIXOS_OZONE_WL = "1";
@@ -79,14 +60,11 @@
       fastfetch
       ffmpeg
       git
-      gnupg
-      lm_sensors
       neovim
       nixpkgs-fmt
       p7zip
       scrcpy
       v4l-utils
-      wl-clipboard
       zsh-fzf-tab
     ];
   };
@@ -112,29 +90,6 @@
     ];
   };
 
-  hardware = {
-    alsa.enablePersistence = true;
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-      extraPackages = with pkgs; [
-        gst_all_1.gst-vaapi
-        libva
-        libva-vdpau-driver
-        libvdpau-va-gl
-        libvpx
-        mesa
-      ];
-      extraPackages32 = with pkgs.driversi686Linux; [
-        libva-vdpau-driver
-        libvdpau-va-gl
-        mesa
-      ];
-    };
-
-    steam-hardware.enable = true;
-  };
-
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
@@ -148,39 +103,16 @@
       LC_TELEPHONE = "fr_FR.UTF-8";
       LC_TIME = "fr_FR.UTF-8";
     };
-    inputMethod = {
-      type = "fcitx5";
-      enable = true;
-      fcitx5 = {
-        addons = with pkgs; [
-          fcitx5-gtk
-          fcitx5-mozc
-        ];
-        waylandFrontend = true;
-      };
-    };
   };
 
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
   networking = {
-    hostName = "ui";
+    hostName = "fuuka";
     networkmanager.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;
 
   programs = {
-    appimage.enable = true;
-    appimage.binfmt = true;
-    appimage.package = pkgs.appimage-run.override {
-      extraPkgs = pkgs: [
-        pkgs.python312
-      ];
-    };
-
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
@@ -219,22 +151,7 @@
   security.rtkit.enable = true;
 
   services = {
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-      openFirewall = true;
-      publish = {
-        enable = true;
-        addresses = true;
-        userServices = true;
-      };
-    };
-
-    desktopManager.plasma6.enable = true;
-
-    displayManager.sddm.enable = true;
-
-    flatpak.enable = true;
+    displayManager.defaultSession = "none+i3";
 
     pipewire = {
       alsa.enable = true;
@@ -244,19 +161,35 @@
     };
 
     printing.enable = true;
-  };
 
-  system = {
-    stateVersion = "25.11";
+    xserver = {
+      desktopManager = {
+        xterm.enable = false;
+      };
 
-    userActivationScripts = {
-      linktosharedfolder.text = ''
-        if [[ ! -h "$HOME/.local/share/fonts" ]]; then
-          ln -s "/run/current-system/sw/share/X11/fonts" "$HOME/.local/share/fonts"
-        fi
-      '';
+      displayManager.lightdm.enable = true;
+
+      enable = true;
+
+      windowManager.i3 = {
+        enable = true;
+        package = pkgs.i3-rounded;
+        extraPackages = with pkgs; [
+          i3lock
+          i3status-rust
+          rofi
+          xkb-switch-i3
+        ];
+      };
+
+      xkb = {
+        layout = "us";
+        variant = "intl";
+      };
     };
   };
+
+  system.stateVersion = "25.11";
 
   systemd.services = {
     fix-suspend-gpp0 = {
@@ -266,14 +199,6 @@
         Type = "oneshot";
         ExecStart = "${pkgs.bash}/bin/bash -c 'echo GPP0 > /proc/acpi/wakeup'";
       };
-    };
-
-    flatpak-repo = {
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.flatpak ];
-      script = ''
-        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      '';
     };
   };
 
@@ -285,19 +210,14 @@
     isNormalUser = true;
     packages = with pkgs; [
       chromium
-      google-chrome
-      kdePackages.kdenlive
-      kdePackages.kmail
-      krita
-      microsoft-edge
-      mpc-qt
-      pixelorama
-      protonup-qt
-      prismlauncher
-      signal-desktop-bin
-      steam
-      wivrn
+      kitty
     ];
     shell = pkgs.zsh;
+  };
+
+  xdg.portal.config = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdgOpenUsePortal = true;
   };
 }
