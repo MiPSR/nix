@@ -10,7 +10,8 @@ echo "Hello $USER !"
 sleep 1
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-CONFIG_DIR="$SCRIPT_DIR/$HOST/nixos"
+NIXOS_SCRIPT_CONFIG_DIR="$SCRIPT_DIR/$HOST/nixos"
+DOTS_SCRIPT_CONFIG_DIR="$SCRIPT_DIR/$HOST/"
 
 while true; do
     clear
@@ -37,19 +38,32 @@ while true; do
                     y)
                         echo "Loading..."
 
-                        if [[ -f "$CONFIG_DIR/configuration.nix" ]]; then
-                            sudo cp "$CONFIG_DIR/configuration.nix" "/etc/nixos/configuration.nix"
+                        if [[ -f "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix" ]]; then
+                            sudo cp "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix" "/etc/nixos/configuration.nix"
                             sudo chown root:root "/etc/nixos/configuration.nix"
                         else
-                            echo "Error: $CONFIG_DIR/configuration.nix not found"
+                            echo "Error: $NIXOS_SCRIPT_CONFIG_DIR/configuration.nix not found"
                         fi
 
-                        if [[ -f "$CONFIG_DIR/hardware-configuration.nix" ]]; then
-                            sudo cp "$CONFIG_DIR/hardware-configuration.nix" "/etc/nixos/hardware-configuration.nix"
-                            sudo chown root:root "/etc/nixos/hardware-configuration.nix"
-                        else
-                            echo "Error: $CONFIG_DIR/hardware-configuration.nix not found"
-                        fi
+                        case $HOST in
+                            "fuuka")
+                                i3_dir="$HOME/.config/i3/"
+                                i3status_dir="$HOME/.config/i3status_rust/"
+
+                                if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/i3/config" ]]; then
+                                    cp "$DOTS_SCRIPT_CONFIG_DIR/i3/config" "$i3_dir/config"
+                                else
+                                    echo "Error: $DOTS_SCRIPT_CONFIG_DIR/i3/config not found"
+                                fi
+
+                                if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml" ]]; then
+                                    cp "$DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml" "$i3status_dir/config"
+                                else
+                                    echo "Error: $DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml not found"
+                                fi
+                            ;;
+                        esac
+
                         echo "Done. Press any key."
                         read -k1
                         break
@@ -70,21 +84,33 @@ while true; do
         s)
             clear
             echo "Saving..."
-            mkdir -p "$CONFIG_DIR"
+            mkdir -p "$NIXOS_SCRIPT_CONFIG_DIR"
 
             if [[ -f "/etc/nixos/configuration.nix" ]]; then
-                sudo cp "/etc/nixos/configuration.nix" "$CONFIG_DIR/configuration.nix"
-                sudo chown $USER: "$CONFIG_DIR/configuration.nix"
+                sudo cp "/etc/nixos/configuration.nix" "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix"
+                sudo chown $USER: "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix"
             else
                 echo "Error: /etc/nixos/configuration.nix not found"
             fi
 
-            if [[ -f "/etc/nixos/hardware-configuration.nix" ]]; then
-                sudo cp "/etc/nixos/hardware-configuration.nix" "$CONFIG_DIR/hardware-configuration.nix"
-                sudo chown $USER: "$CONFIG_DIR/hardware-configuration.nix"
-            else
-                echo "Error: /etc/nixos/hardware-configuration.nix not found"
-            fi
+            case $HOST in
+                "fuuka")
+                    i3_dir="$HOME/.config/i3/"
+                    i3status_dir="$HOME/.config/i3status_rust/"
+
+                    if [[ -f "$i3_dir/config" ]]; then
+                        cp "$i3_dir/config" "$DOTS_SCRIPT_CONFIG_DIR/i3/config"
+                    else
+                        echo "Error: $i3_dir/config not found"
+                    fi
+
+                    if [[ -f "$i3status_dir/config" ]]; then
+                        cp "$i3status_dir/config" "$DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml"
+                    else
+                        echo "Error: $i3status_dir/config.toml not found"
+                    fi
+                ;;
+            esac
 
             echo "Done. Press any key."
             read -k1

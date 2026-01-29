@@ -1,5 +1,5 @@
 # NixOS configurations
-This repository contains my personal NixOS configuration files for various machines.
+This repository contains my personal NixOS configuration and dot files for various machines.
 ## Machines
 ### fuuka
 Portable NixOS: a **Samsung USB key** on my **physical keyring**.  
@@ -39,3 +39,8 @@ Installed Flatpak applications on **ui**:
 - **Flatseal**
 - **OBS Studio** + plugins
 - **osu!** (for faster updates)
+## AppImage
+AppImage is an inconvenient and outdated approach, mostly used by proprietary apps whose developers don’t maintain proper Linux packages.
+AppImage applications in `~/.appimages/` on **ui**:
+- Ankama Launcher (worst launcher ever made)
+- Immersed (always out of date on Nix)

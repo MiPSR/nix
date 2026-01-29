@@ -287,7 +287,6 @@
       chromium
       google-chrome
       kdePackages.kdenlive
-      kdePackages.kmail
       krita
       microsoft-edge
       mpc-qt
@@ -296,6 +295,8 @@
       prismlauncher
       signal-desktop-bin
       steam
+      thunderbird-esr-bin
+      wayvr-dashboard
       wivrn
     ];
     shell = pkgs.zsh;
