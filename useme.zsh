@@ -13,10 +13,56 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 NIXOS_SCRIPT_CONFIG_DIR="$SCRIPT_DIR/$HOST/nixos"
 DOTS_SCRIPT_CONFIG_DIR="$SCRIPT_DIR/$HOST/"
 
+declare -a files=()
+
+FILE_COUNT=0
+
+if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/files.txt" ]]; then
+  while IFS=: read -r filename system_path; do
+    [[ -z $filename || -z $system_path ]] && continue
+    files+=("$filename:$system_path")
+    FILE_COUNT=$((FILE_COUNT + 1))
+  done < "$DOTS_SCRIPT_CONFIG_DIR/files.txt"
+fi
+
+deploy() {
+  for f in "${files[@]}"; do
+    filename=${f%%:*}
+    system_path=${f##*:}
+    echo "Copying $filename → $system_path"
+    if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/$filename" ]]; then
+        mkdir -p "$(dirname "$system_path")"
+        cp "$DOTS_SCRIPT_CONFIG_DIR/$filename" "$system_path"
+        chown $USER: "$system_path"
+    else
+        echo "Error: $DOTS_SCRIPT_CONFIG_DIR/$filename not found"
+    fi
+  done
+}
+
+collect() {
+  for f in "${files[@]}"; do
+    filename=${f%%:*}
+    system_path=${f##*:}
+    echo "Copying $system_path → $DOTS_SCRIPT_CONFIG_DIR/$filename"
+    if [[ -f "$system_path" ]]; then
+        mkdir -p "$(dirname "$DOTS_SCRIPT_CONFIG_DIR/$filename")"
+        cp "$system_path" "$DOTS_SCRIPT_CONFIG_DIR/$filename"
+        chown $USER: "$DOTS_SCRIPT_CONFIG_DIR/$filename"
+    else
+        echo "Error: $system_path not found"
+    fi
+  done
+}
+
 while true; do
     clear
     echo "# NixOS sync script #"
-    echo "Current system: $HOST"
+    if (( FILE_COUNT < 2 )); then
+        echo "Current system: $HOST [$FILE_COUNT file available]"
+    else
+        echo "Current system: $HOST [$FILE_COUNT files available]"
+    fi
     echo "Current user: $USER"
 
     lines=$(tput lines)
@@ -25,7 +71,7 @@ while true; do
     local width=$COLUMNS
     printf '%*s\n' "$width" '' | tr ' ' '#'
 
-    echo -n "action? Action: [s] system -> git | [l] git -> system | [q] quit "
+    echo -n "Action: [s] system -> git | [l] git -> system | [q] quit "
     read -k1 action
 
     case $action in
@@ -45,24 +91,7 @@ while true; do
                             echo "Error: $NIXOS_SCRIPT_CONFIG_DIR/configuration.nix not found"
                         fi
 
-                        case $HOST in
-                            "fuuka")
-                                i3_dir="$HOME/.config/i3/"
-                                i3status_dir="$HOME/.config/i3status_rust/"
-
-                                if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/i3/config" ]]; then
-                                    cp "$DOTS_SCRIPT_CONFIG_DIR/i3/config" "$i3_dir/config"
-                                else
-                                    echo "Error: $DOTS_SCRIPT_CONFIG_DIR/i3/config not found"
-                                fi
-
-                                if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml" ]]; then
-                                    cp "$DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml" "$i3status_dir/config"
-                                else
-                                    echo "Error: $DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml not found"
-                                fi
-                            ;;
-                        esac
+                        deploy
 
                         echo "Done. Press any key."
                         read -k1
@@ -93,24 +122,7 @@ while true; do
                 echo "Error: /etc/nixos/configuration.nix not found"
             fi
 
-            case $HOST in
-                "fuuka")
-                    i3_dir="$HOME/.config/i3/"
-                    i3status_dir="$HOME/.config/i3status_rust/"
-
-                    if [[ -f "$i3_dir/config" ]]; then
-                        cp "$i3_dir/config" "$DOTS_SCRIPT_CONFIG_DIR/i3/config"
-                    else
-                        echo "Error: $i3_dir/config not found"
-                    fi
-
-                    if [[ -f "$i3status_dir/config" ]]; then
-                        cp "$i3status_dir/config" "$DOTS_SCRIPT_CONFIG_DIR/i3status-rust/config.toml"
-                    else
-                        echo "Error: $i3status_dir/config.toml not found"
-                    fi
-                ;;
-            esac
+            collect
 
             echo "Done. Press any key."
             read -k1

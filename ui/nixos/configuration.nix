@@ -205,6 +205,7 @@
       shellAliases = {
         cln = "sudo nix-collect-garbage -d && sudo nix-store --gc && sudo nix-store --optimise && sudo nixos-rebuild boot";
         ff = "fastfetch";
+        fix-audio = "systemctl --user restart pipewire pipewire-pulse";
         la = "ls -a";
         ll = "ls -l";
         lla = "ls -la";
@@ -279,9 +280,25 @@
 
   time.timeZone = "Europe/Paris";
 
+  users.users.hoshino = {
+    description = "小鳥遊ホシノ";
+    home = "/home/hoshino";
+    isNormalUser = true;
+    packages = with pkgs; [
+      gnome-mahjongg
+      google-chrome
+      openttd
+      steam
+      wayvr-dashboard
+      wivrn
+    ];
+    shell = pkgs.dash;
+  };
+
   users.users.m = {
     description = "M";
     extraGroups = [ "networkmanager" "wheel" ];
+    home = "/home/m/";
     isNormalUser = true;
     packages = with pkgs; [
       chromium
@@ -296,6 +313,8 @@
       signal-desktop-bin
       steam
       thunderbird-esr-bin
+      transmission_4-qt6
+      unityhub
       wayvr-dashboard
       wivrn
     ];
