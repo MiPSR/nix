@@ -1,0 +1,41 @@
+* {
+	font-family: "Hack Nerd Font";
+	font-size: 14px;
+	margin: 3px 3px 0 3px;
+	transition: none;
+}
+
+window#waybar {
+	background: rgba(0, 0, 0, 0);
+	opacity: 1;
+}
+
+#clock,
+#custom-power,
+#custom-launcher,
+#pulseaudio,
+#tray,
+#window,
+#workspaces button,
+#workspaces button:hover,
+#workspaces button.active {
+	background: #000000;
+	border: none;
+	border-radius: 64px;
+	box-shadow: none;
+	color: #BBBBBB;
+	margin: 0 4px;
+	padding: 0 16px;
+	text-shadow: none;
+}
+
+#workspaces button.active {
+	background: #008080;
+	color: black;
+}
+
+#workspaces {
+	border: none;
+	padding: 0;
+	margin: 0;
+}

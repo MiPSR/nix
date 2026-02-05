@@ -1,8 +1,13 @@
 #!/usr/bin/env zsh
 
+if [[ -z "$ZSH_VERSION" ]]; then
+	echo "Error: this script must be run with zsh." >&2
+	exit 1
+fi
+
 if [[ "$EUID" -eq 0 ]]; then
-    echo "Error: running this script as root is not allowed."
-    exit 1
+	echo "Error: running this script as root is not allowed." >&2
+	exit 1
 fi
 
 clear
@@ -10,122 +15,125 @@ echo "Hello $USER !"
 sleep 1
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-NIXOS_SCRIPT_CONFIG_DIR="$SCRIPT_DIR/$HOST/nixos"
-DOTS_SCRIPT_CONFIG_DIR="$SCRIPT_DIR/$HOST/"
+DOTS_LOCAL_DIR="/home/$USER/.config"
+DOTS_REPOSITORY_DIR="$SCRIPT_DIR/$HOST"
+NIX_REPOSITORY_DIR="$DOTS_REPOSITORY_DIR/nixos"
 
-declare -a files=()
-
+dotfiles=()
 FILE_COUNT=0
 
-if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/files.txt" ]]; then
-  while IFS=: read -r filename system_path; do
-    [[ -z $filename || -z $system_path ]] && continue
-    files+=("$filename:$system_path")
-    FILE_COUNT=$((FILE_COUNT + 1))
-  done < "$DOTS_SCRIPT_CONFIG_DIR/files.txt"
+if [[ -f "$DOTS_REPOSITORY_DIR/files.txt" ]]; then
+	while IFS= read -r line; do
+		[[ -n "$line" ]] && dotfiles+=("$line") && ((FILE_COUNT++))
+	done < "$DOTS_REPOSITORY_DIR/files.txt"
 fi
 
 deploy() {
-  for f in "${files[@]}"; do
-    filename=${f%%:*}
-    system_path=${f##*:}
-    echo "Copying $filename → $system_path"
-    if [[ -f "$DOTS_SCRIPT_CONFIG_DIR/$filename" ]]; then
-        mkdir -p "$(dirname "$system_path")"
-        cp "$DOTS_SCRIPT_CONFIG_DIR/$filename" "$system_path"
-        chown $USER: "$system_path"
-    else
-        echo "Error: $DOTS_SCRIPT_CONFIG_DIR/$filename not found"
-    fi
-  done
+	for file in "${dotfiles[@]}"; do
+		local source="$DOTS_REPOSITORY_DIR/$file"
+		local target="$DOTS_LOCAL_DIR/$file"
+		if [[ -f "$source" ]]; then
+			mkdir -p "${target:h}"
+			cp "$source" "$target"
+			sudo chown "$USER:" "$target"
+		else
+			echo "Error: $source not found" >&2
+		fi
+	done
 }
 
 collect() {
-  for f in "${files[@]}"; do
-    filename=${f%%:*}
-    system_path=${f##*:}
-    echo "Copying $system_path → $DOTS_SCRIPT_CONFIG_DIR/$filename"
-    if [[ -f "$system_path" ]]; then
-        mkdir -p "$(dirname "$DOTS_SCRIPT_CONFIG_DIR/$filename")"
-        cp "$system_path" "$DOTS_SCRIPT_CONFIG_DIR/$filename"
-        chown $USER: "$DOTS_SCRIPT_CONFIG_DIR/$filename"
-    else
-        echo "Error: $system_path not found"
-    fi
-  done
+	for file in "${dotfiles[@]}"; do
+		local source="$DOTS_LOCAL_DIR/$file"
+		local target="$DOTS_REPOSITORY_DIR/$file"
+		if [[ -f "$source" ]]; then
+			mkdir -p "${target:h}"
+			cp "$source" "$target"
+		else
+			echo "Error: $source not found" >&2
+		fi
+	done
 }
 
 while true; do
-    clear
-    echo "# NixOS sync script #"
-    if (( FILE_COUNT < 2 )); then
-        echo "Current system: $HOST [$FILE_COUNT file available]"
-    else
-        echo "Current system: $HOST [$FILE_COUNT files available]"
-    fi
-    echo "Current user: $USER"
+	clear
+	echo "# NixOS sync script #"
 
-    lines=$(tput lines)
-    tput cup $((lines - 2)) 0
+	if (( FILE_COUNT < 2 )); then
+		echo "Current system: $HOST [$FILE_COUNT file available]"
+	else
+		echo "Current system: $HOST [$FILE_COUNT files available]"
+	fi
 
-    local width=$COLUMNS
-    printf '%*s\n' "$width" '' | tr ' ' '#'
+	echo "Current user: $USER"
 
-    echo -n "Action: [s] system -> git | [l] git -> system | [q] quit "
-    read -k1 action
+	lines=$(tput lines)
+	tput cup $((lines - 2)) 0
 
-    case $action in
-        l)
-            clear
-            echo -n "This is going to replace your existing configuration.nix, are you sure ? (y/n) "
-            while true; do
-                read -k1 choice
-                case $choice in
-                    y)
-                        echo "Loading..."
+	local width=$COLUMNS
+	printf '%*s\n' "$width" '' | tr ' ' '#'
 
-                        if [[ -f "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix" ]]; then
-                            sudo cp "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix" "/etc/nixos/configuration.nix"
-                            sudo chown root:root "/etc/nixos/configuration.nix"
-                        else
-                            echo "Error: $NIXOS_SCRIPT_CONFIG_DIR/configuration.nix not found"
-                        fi
+	echo -n "Action: [s] system -> git | [l] git -> system | [q] quit "
+	read -k1 action
 
-                        deploy
+	case $action in
+		l)
+			clear
+			echo -n "This is going to replace your existing configuration.nix, are you sure ? (y/n) "
 
-                        echo "Done. Press any key."
-                        read -k1
-                        break
-                    ;;
-                    n)
-                        break
-                    ;;
-                esac
-            done
-        ;;
-        q)
-            clear
-            echo "Goodbye $USER !"
-            sleep 1
-            clear
-            exit
-        ;;
-        s)
-            clear
-            echo "Saving..."
-            mkdir -p "$NIXOS_SCRIPT_CONFIG_DIR"
+			while true; do
+				read -k1 choice
+				case $choice in
+					y)
+						echo "Loading..."
 
-            if [[ -f "/etc/nixos/configuration.nix" ]]; then
-                sudo cp "/etc/nixos/configuration.nix" "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix"
-                sudo chown $USER: "$NIXOS_SCRIPT_CONFIG_DIR/configuration.nix"
-            else
-                echo "Error: /etc/nixos/configuration.nix not found"
-            fi
+						local nix_source="$NIX_REPOSITORY_DIR/configuration.nix"
+						local nix_target="/etc/nixos/configuration.nix"
 
-            collect
+						if [[ -f "$nix_source" ]]; then
+							sudo cp "$nix_source" "$nix_target"
+							sudo chown root:root "$nix_target"
+						else
+							echo "Error: $nix_source not found" >&2
+						fi
 
-            echo "Done. Press any key."
-            read -k1
-        ;;
+						if (( ${#dotfiles} > 0 )); then deploy; fi
+
+						echo "Done. Press any key."
+						read -k1
+						break
+					;;
+					n)
+						break
+					;;
+				esac
+			done
+			;;
+			q)
+				clear
+				echo "Goodbye $USER !"
+				sleep 1
+				clear
+				exit
+			;;
+			s)
+				clear
+				echo "Saving..."
+
+				local nix_source="/etc/nixos/configuration.nix"
+				local nix_target="$NIX_REPOSITORY_DIR/configuration.nix"
+
+				if [[ -f "$nix_source" ]]; then
+					mkdir -p "${nix_target:h}"
+					cp "$nix_source" "$nix_target"
+				else
+					echo "Error: $nix_source not found" >&2
+				fi
+
+				if (( ${#dotfiles} > 0 )); then collect; fi
+
+				echo "Done. Press any key."
+				read -k1
+			;;
     esac
 done

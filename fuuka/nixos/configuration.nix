@@ -23,7 +23,7 @@
       "v4l2loopback"
     ];
 
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_5_10;
 
     kernelParams = [
       "boot.shell_on_fail"
@@ -48,6 +48,11 @@
       logo = "${pkgs.nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake-white.png";
       theme = "bgrt";
     };
+
+    tmp = {
+      useTmpfs = true;
+      tmpfsSize = "4G";
+    };
   };
 
   console.keyMap = "us-acentos";
@@ -56,15 +61,27 @@
     sessionVariables.NIXOS_OZONE_WL = "1";
     systemPackages = with pkgs; [
       alsa-utils
+      alvr
       android-tools
       fastfetch
       ffmpeg
       git
+      hypridle
+      hyprlock
+      hyprpaper
+      hyprshot
+      mako
       neovim
       nixpkgs-fmt
       p7zip
+      pwvucontrol
       scrcpy
+      steam
       v4l-utils
+      vifm
+      waybar
+      wlogout
+      wofi
       zsh-fzf-tab
     ];
   };
@@ -84,10 +101,18 @@
 
     packages = with pkgs; [
       ibm-plex
+      nerd-fonts.hack
+      nerd-fonts.noto
+      noto-fonts
       source-han-sans
       source-han-serif
       twemoji-color-font
     ];
+  };
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
   };
 
   i18n = {
@@ -117,6 +142,8 @@
       enable = true;
       enableSSHSupport = true;
     };
+
+    hyprland.enable = true;
 
     zsh = {
       autosuggestions.enable = true;
@@ -151,7 +178,12 @@
   security.rtkit.enable = true;
 
   services = {
-    displayManager.defaultSession = "none+i3";
+    displayManager.gdm.enable = true;
+
+    journald.extraConfig = ''
+      Storage=volatile
+      RuntimeMaxUse=512M
+    '';
 
     pipewire = {
       alsa.enable = true;
@@ -161,32 +193,6 @@
     };
 
     printing.enable = true;
-
-    xserver = {
-      desktopManager = {
-        xterm.enable = false;
-      };
-
-      displayManager.lightdm.enable = true;
-
-      enable = true;
-
-      windowManager.i3 = {
-        enable = true;
-        package = pkgs.i3-rounded;
-        extraPackages = with pkgs; [
-          i3lock
-          i3status-rust
-          rofi
-          xkb-switch-i3
-        ];
-      };
-
-      xkb = {
-        layout = "us";
-        variant = "intl";
-      };
-    };
   };
 
   system.stateVersion = "25.11";
@@ -200,6 +206,14 @@
         ExecStart = "${pkgs.bash}/bin/bash -c 'echo GPP0 > /proc/acpi/wakeup'";
       };
     };
+
+    flatpak-repo = {
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.flatpak ];
+      script = ''
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      '';
+    };
   };
 
   time.timeZone = "Europe/Paris";
@@ -209,15 +223,20 @@
     extraGroups = [ "networkmanager" "wheel" ];
     isNormalUser = true;
     packages = with pkgs; [
+      alvr
       chromium
+      kdePackages.dolphin
+      kdePackages.kate
       kitty
+      wayvr-dashboard
+      wivrn
     ];
     shell = pkgs.zsh;
   };
 
-  xdg.portal.config = {
+  zramSwap = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    xdgOpenUsePortal = true;
+    algorithm = "zstd";
+    memoryPercent = 33;
   };
 }

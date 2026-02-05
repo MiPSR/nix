@@ -3,7 +3,7 @@ This repository contains my personal NixOS configuration and dot files for vario
 ## Machines
 ### fuuka
 Portable NixOS: a **Samsung USB key** on my **physical keyring**.  
-**i3 X11**, running on a **Zen** kernel.  
+**i3 X11**, running on a **5.10** kernel.  
 Runs for a variety of applications.
 ### homura
 Server: a **Dell Optiplex 3040** with an **i3-6100**.  
