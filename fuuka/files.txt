@@ -1,0 +1,7 @@
+@nixos
+configuration.nix
+
+@nixos_common
+common.nix
+desktop.nix
+fix_b550.nix

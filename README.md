@@ -1,10 +1,10 @@
 # NixOS configurations
 This repository contains my personal NixOS configuration and dot files for various machines.
 ## Machines
-### fuuka (not available right now)
+### fuuka
 Portable NixOS: a **Samsung USB key** on my **physical keyring**.  
-~~**Hyprland** on **Wayland**, running on a ~~**5.10**~~ kernel.~~ (this changed, will be pushed later)  
-Runs for a variety of applications.
+**Hyprland** on **Wayland**, running on a **6.1** kernel. (this changed, will be pushed later)  
+Runs a variety of applications.
 ### homura (not available right now)
 Server: a **Dell Optiplex 3040** with an **i3-6100**.  
 **Headless**, running on a **hardened** kernel.  
@@ -17,7 +17,6 @@ Supports AppImages and Flatpak for applications with limited native support.
 ## Usage
 `useme.zsh` syncs the files listed in `files.txt` for the current `$HOST`,  
 separating common configs from machine-specific ones.
-
 ## Non-Nix Packages
 ### AppImage
 AppImage is an inconvenient and outdated approach, mostly used by proprietary apps whose developers don’t maintain proper Linux packages.
@@ -27,7 +26,7 @@ AppImage applications in `~/.appimages/` on **ui**:
 ### Flatpak
 Flatpak is not declarative (yet, as far as I know), which is inconvenient.
 Installed Flatpak applications on **ui**:
-- **Bottles** (**fixes VP9 error** in *Blue Archive* and *Stella Sora*)
+- **Bottles** (**fixes VP9 error** in **Blue Archive** and **Stella Sora**)
 - **Flatseal**
 - **OBS Studio** + plugins
 - **osu!** (for faster updates)
