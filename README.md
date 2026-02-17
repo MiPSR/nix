@@ -3,7 +3,7 @@ This repository contains my personal NixOS configuration and dot files for vario
 ## Machines
 ### fuuka
 Portable NixOS: a **Samsung USB key** on my **physical keyring**.  
-**Hyprland** on **Wayland**, running on a **6.1** kernel. (this changed, will be pushed later)  
+**KDE Plasma** on **Wayland**, running on a **6.1** kernel.  
 Runs a variety of applications.
 ### homura (not available right now)
 Server: a **Dell Optiplex 3040** with an **i3-6100**.  
@@ -21,8 +21,9 @@ separating common configs from machine-specific ones.
 ### AppImage
 AppImage is an inconvenient and outdated approach, mostly used by proprietary apps whose developers don’t maintain proper Linux packages.
 AppImage applications in `~/.appimages/` on **ui**:
-- Ankama Launcher (worst launcher ever made)
-- Immersed (always out of date on Nix)
+- **Ankama Launcher** (worst launcher ever made)
+- **Immersed** (always out of date on Nix)
+- **WayVR** (server not working on Nix)
 ### Flatpak
 Flatpak is not declarative (yet, as far as I know), which is inconvenient.
 Installed Flatpak applications on **ui**:
@@ -42,7 +43,7 @@ Installed Flatpak applications on **ui**:
 * `upd`: updates channels and rebuilds the system with the latest upgrades.
 * `cln`: cleans the system by removing old generations (garbage collection).
 ### Laziness
-* `ff`: **fastfetch**.
+* `ff`: `fastfetch`.
 * `la`: list all files (`ls -a`).
 * `ll`: list files in long format (`ls -l`).
 * `lla`: list all files in long format (`ls -la`).

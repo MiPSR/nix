@@ -43,8 +43,8 @@
 	users.users.m = {
 		extraGroups = [ "networkmanager" "wheel" ];
 		packages = with pkgs; [
-			alvr
 			chromium
+			gnome-solanum
 			google-chrome
 			kdePackages.kdenlive
 			krita
@@ -58,7 +58,6 @@
 			thunderbird-esr-bin
 			transmission_4-qt6
 			unityhub
-			wayvr-dashboard
 			wivrn
 		];
 	};
