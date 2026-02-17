@@ -5,6 +5,7 @@ This repository contains my personal NixOS configuration and dot files for vario
 Portable NixOS: a **Samsung USB key** on my **physical keyring**.  
 **KDE Plasma** on **Wayland**, running on a **6.1** kernel.  
 Runs a variety of applications.
+Supports AppImages for applications with limited native support.
 ### homura (not available right now)
 Server: a **Dell Optiplex 3040** with an **i3-6100**.  
 **Headless**, running on a **hardened** kernel.  
@@ -20,9 +21,10 @@ separating common configs from machine-specific ones.
 ## Non-Nix Packages
 ### AppImage
 AppImage is an inconvenient and outdated approach, mostly used by proprietary apps whose developers don’t maintain proper Linux packages.
-AppImage applications in `~/.appimages/` on **ui**:
+AppImage in `~/.appimages/` on **ui**:
 - **Ankama Launcher** (worst launcher ever made)
 - **Immersed** (always out of date on Nix)
+AppImage in `~/.appimages/` on **ui** & **fuuka**:
 - **WayVR** (server not working on Nix)
 ### Flatpak
 Flatpak is not declarative (yet, as far as I know), which is inconvenient.

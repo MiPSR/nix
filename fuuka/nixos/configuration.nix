@@ -5,6 +5,10 @@
 		kernelPackages = pkgs.linuxPackages_6_1;
 	};
 
+	environment.plasma6.excludePackages = with pkgs.kdePackages; [
+		discover
+	];
+
 	imports = [
 		./common.nix
 		./desktop.nix
@@ -16,15 +20,25 @@
 		hostName = "fuuka";
 	};
 
+	programs = {
+		appimage.enable = true;
+		appimage.binfmt = true;
+		appimage.package = pkgs.appimage-run.override {
+			extraPkgs = pkgs: [
+				pkgs.python312
+			];
+		};
+	};
+
 	system.stateVersion = "25.11";
 
 	users.users.m = {
 		extraGroups = [ "networkmanager" "wheel" ];
 		packages = with pkgs; [
-			alvr
 			chromium
 			krita
 			steam
+			wivrn
 		];
 	};
 }
