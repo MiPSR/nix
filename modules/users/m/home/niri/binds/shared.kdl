@@ -1,0 +1,32 @@
+// Keybinds shared across hosts; niri.nix sets the mod prefix per host.
+// Dragging/resizing floating windows is built-in: mod+LMB moves, mod+RMB resizes.
+// Host-specific binds live in binds/<hostname>.kdl; niri.nix wraps both in one binds block.
+Ctrl+Alt+Delete { quit skip-confirmation=true; }
+
+	Print { screenshot-screen; }
+	Alt+Print { screenshot-window; }
+	Ctrl+Print { screenshot; }
+
+	XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05-"; }
+	XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+	XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+	XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"; }
+
+	XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+	XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
+
+	Mod+F { spawn "thunar"; }
+	Mod+Return { spawn "alacritty"; }
+	Mod+Space { spawn "anyrun"; }
+	Mod+L { spawn "swaylock"; }
+
+	Mod+Left { focus-column-left; }
+	Mod+Right { focus-column-right; }
+
+	Mod+J { switch-preset-column-width; }
+	Mod+V { toggle-window-floating; }
+
+	Mod+WheelScrollUp { focus-column-left; }
+	Mod+WheelScrollDown { focus-column-right; }
+	Mod+WheelScrollLeft { focus-column-left; }
+	Mod+WheelScrollRight { focus-column-right; }

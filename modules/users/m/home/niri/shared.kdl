@@ -1,0 +1,125 @@
+// Match hyprland's compositor-drawn decorations: no client-side titlebars.
+prefer-no-csd
+
+// Environment variables for processes spawned by niri.
+environment {
+	GLFW_IM_MODULE "ibus"
+	GTK_THEME "Adwaita-dark"
+	QT_IM_MODULE "fcitx"
+	QT_IM_MODULES "wayland;fcitx;ibus"
+	QT_QPA_PLATFORM "wayland;xcb"
+	QT_QPA_PLATFORMTHEME "qt6ct"
+	SDL_IM_MODULE "fcitx"
+	XCURSOR_SIZE "24"
+	XCURSOR_THEME "Bibata-Modern-Ice"
+	XMODIFIERS "@im=fcitx"
+}
+
+// Autostart, shared across machines.
+spawn-at-startup "gsettings" "set" "org.gnome.desktop.interface" "color-scheme" "prefer-dark"
+spawn-at-startup "gsettings" "set" "org.gnome.desktop.interface" "gtk-theme" "Adwaita-dark"
+// Wallpaper and notifications are handled by wayle.
+spawn-at-startup "fcitx5" "-d" "--replace"
+spawn-at-startup "anyrun" "daemon"
+spawn-at-startup "pam_kwallet_init"
+// Lock after 10 minutes idle.
+spawn-at-startup "swayidle" "-w" "timeout" "600" "swaylock"
+
+// Input.
+input {
+	keyboard {
+		xkb {
+			layout "us"
+			variant "intl"
+		}
+		numlock
+	}
+
+	mouse {
+		accel-profile "flat"
+	}
+
+	touchpad {
+		natural-scroll
+		click-method "clickfinger"
+	}
+}
+
+// Disable the top-left overview hot corner.
+gestures {
+	hot-corners {
+		off
+	}
+}
+
+// Disable the recent-windows switcher (Alt+Tab and friends).
+recent-windows {
+	off
+}
+
+// Niri's own cursor; overrides XCURSOR_* env vars (defaults to "default").
+cursor {
+	xcursor-theme "Bibata-Modern-Ice"
+	xcursor-size 24
+}
+
+// Layout: gaps_in 8 / gaps_out 12 via gaps + struts.
+layout {
+	gaps 8
+
+	struts {
+		left 4
+		right 4
+		top 4
+		bottom 4
+	}
+
+	focus-ring {
+		off
+	}
+
+	border {
+		on
+		width 4
+		// Substituted from m-palette.nix by niri.nix.
+		active-color "@border-active@"
+		inactive-color "@border-inactive@"
+		urgent-color "@border-urgent@"
+	}
+
+	shadow {
+		on
+		softness 4
+		spread 0
+		offset x=0 y=0
+		// m-palette black; see modules/users/m/home/m-palette.nix.
+		color "#1b1b1bee"
+	}
+}
+
+// Disable animations.
+animations {
+	off
+}
+
+// thunar opens floating, 960x540, centered.
+window-rule {
+	match app-id="thunar"
+	open-floating true
+	default-column-width { fixed 960; }
+	default-window-height { fixed 540; }
+}
+
+// mpv and imv open floating.
+window-rule {
+	match app-id="mpv"
+	match app-id="imv"
+	open-floating true
+}
+
+// No "Important Hotkeys" pop-up at startup.
+hotkey-overlay {
+	skip-at-startup
+}
+
+// Keybinds live in binds/ (shared.kdl + one file per host); niri.nix picks the mod prefix.

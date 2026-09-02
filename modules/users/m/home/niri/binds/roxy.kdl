@@ -1,0 +1,5 @@
+// Laptop-specific binds.
+Mod+1 { focus-monitor-left; }
+Mod+2 { focus-monitor-right; }
+
+Mod+Shift+C { close-window; }
