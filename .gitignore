@@ -1,2 +1,3 @@
 flake.lock
 hardware-configuration.nix
+host.nix
