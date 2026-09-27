@@ -1,25 +1,14 @@
+# Original idea: https://www.vimjoyer.com/vid79-parts-wrapped
+
 {
   description = "M's flake.";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations.ui = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./modules
-        ./hosts/ui.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.users.m = import ./modules/m/home.nix;
-        }
-      ];
-    };
-  };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }
