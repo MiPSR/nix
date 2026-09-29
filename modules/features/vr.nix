@@ -1,5 +1,7 @@
 { self, ... }: {
   flake.nixosModules.feature-vr = { pkgs, ... }: {
+    boot.kernelModules = [ "uinput" ];
+
     environment.systemPackages = with pkgs; [
       alcom
       bs-manager
@@ -12,6 +14,15 @@
       allowedUDPPorts = [ 9757 ];
     };
 
-    services.avahi.enable = true;
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+      publish = {
+        addresses = true;
+        enable = true;
+        userServices = true;
+      };
+    };
   };
 }

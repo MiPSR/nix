@@ -5,18 +5,45 @@
       darktable
       (discord.override { withVencord = true; })
       jdk
-      kdePackages.elisa
-      kdePackages.falkon
-      kdePackages.kaddressbook
-      kdePackages.kate
-      kdePackages.kclock
-      kdePackages.kdepim-addons
-      kdePackages.kmail
       krita
       librewolf
       qtscrcpy
       stoat-desktop
     ];
+
+    fonts = {
+      fontDir.enable = true;
+
+      fontconfig = {
+        enable = true;
+        defaultFonts = {
+          serif = [
+            "Roboto Serif"
+            "Noto Serif CJK JP"
+          ];
+          sansSerif = [
+            "Roboto"
+            "Noto Sans CJK JP"
+          ];
+          monospace = [
+            "RobotoMono Nerd Font"
+            "Roboto Mono"
+          ];
+          emoji = [ "Noto Color Emoji" ];
+        };
+      };
+
+      packages = with pkgs; [
+        nerd-fonts.roboto-mono
+        nerd-fonts.symbols-only
+        noto-fonts-cjk-sans
+        noto-fonts-cjk-serif
+        noto-fonts-color-emoji
+        roboto
+        roboto-mono
+        roboto-serif
+      ];
+    };
 
     hardware.opentabletdriver.enable = true;
 
