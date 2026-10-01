@@ -1,7 +1,7 @@
 { ... }: {
   flake.nixosModules.feature-gui = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
-      collabora-desktop
+      #collabora-desktop
       darktable
       (discord.override { withVencord = true; })
       jdk
@@ -76,6 +76,7 @@
       };
       power-profiles-daemon.enable = true;
       udisks2.enable = true;
+      xserver.enable = false;
     };
   };
 }

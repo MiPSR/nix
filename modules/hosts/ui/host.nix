@@ -8,6 +8,8 @@
       self.nixosModules.host-ui-hardware
       self.nixosModules.profile-pc
       self.nixosModules.profile-plasma
+      #self.nixosModules.feature-umbriel-m
+      self.nixosModules.feature-niri-m
     ];
   };
 }
