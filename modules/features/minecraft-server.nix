@@ -7,10 +7,6 @@
       hostBridge = "br-services";
       localAddress = "192.168.143.110/24";
 
-      bindMounts."/var/lib/minecraft" = {
-        isReadOnly = false;
-      };
-
       config = { pkgs, ... }: {
         system.stateVersion = "26.05";
 
@@ -18,13 +14,7 @@
 
         nix.enable = false;
 
-        networking.interfaces.eth0.ipv4.routes = [
-          {
-            address = "0.0.0.0";
-            prefixLength = 0;
-            via = "192.168.143.254";
-          }
-        ];
+        networking.defaultGateway = "192.168.143.254";
 
         users.users.minecraft = {
           isSystemUser = true;
@@ -66,8 +56,8 @@
     systemd.services."container@minecraft" = {
       after = [ "NetworkManager-ensure-profiles.service" ];
       wants = [ "NetworkManager-ensure-profiles.service" ];
-      startLimitBurst = 0;
-      startLimitIntervalSec = 0;
+      startLimitBurst = 3;
+      startLimitIntervalSec = 60;
     };
   };
 }

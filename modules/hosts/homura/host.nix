@@ -73,7 +73,7 @@
             "192.168.144.0/24"
             "192.168.143.0/24"
           ];
-          internalInterfaces = [ "enp2s0" ];
+          internalInterfaces = [ "br-services" ];
           externalInterface = "enp3s0";
           forwardPorts = [
             {
