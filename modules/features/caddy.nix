@@ -39,9 +39,11 @@
       };
     };
 
-    systemd.services."container@caddy".serviceConfig = {
-      CPUWeight = 50;
-      MemoryMax = "512M";
+    systemd.services."container@caddy" = {
+      after = [ "NetworkManager-ensure-profiles.service" ];
+      wants = [ "NetworkManager-ensure-profiles.service" ];
+      startLimitBurst = 0;
+      startLimitIntervalSec = 0;
     };
   };
 }

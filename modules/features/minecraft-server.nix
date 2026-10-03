@@ -63,9 +63,11 @@
       };
     };
 
-    systemd.services."container@minecraft".serviceConfig = {
-      CPUWeight = 80;
-      MemoryMax = "12G";
+    systemd.services."container@minecraft" = {
+      after = [ "NetworkManager-ensure-profiles.service" ];
+      wants = [ "NetworkManager-ensure-profiles.service" ];
+      startLimitBurst = 0;
+      startLimitIntervalSec = 0;
     };
   };
 }

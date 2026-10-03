@@ -171,9 +171,11 @@
       };
     };
 
-    systemd.services."container@adguard".serviceConfig = {
-      CPUWeight = 10;
-      MemoryMax = "512M";
+    systemd.services."container@adguard" = {
+      after = [ "NetworkManager-ensure-profiles.service" ];
+      wants = [ "NetworkManager-ensure-profiles.service" ];
+      startLimitBurst = 0;
+      startLimitIntervalSec = 0;
     };
   };
 }
