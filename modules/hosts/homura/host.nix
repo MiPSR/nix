@@ -29,20 +29,24 @@
             ipv4.method = "auto";
             ipv6.method = "disabled";
           };
+          br-services = {
+            connection = {
+              id = "br-services";
+              type = "bridge";
+              interface-name = "br-services";
+              autoconnect = true;
+            };
+            bridge.stp = false;
+            ipv4 = {
+              method = "manual";
+              addresses = "192.168.143.254/24";
+            };
+            ipv6.method = "disabled";
+          };
         };
-
-        networking.bridges.br-services.interfaces = [ ];
-
-        networking.interfaces.br-services.ipv4.addresses = [
-          {
-            address = "192.168.143.254";
-            prefixLength = 24;
-          }
-        ];
 
         networking.nftables.enable = true;
         networking.firewall.filterForward = true;
-        networking.firewall.checkReversePath = false;
 
         networking.firewall.extraForwardRules = ''
           ip saddr 192.168.144.0/24 ip daddr 192.168.143.0/24 accept
