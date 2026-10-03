@@ -89,18 +89,36 @@
           ];
         };
 
-        services.dnsmasq = {
+        services.dnsmasq.enable = false;
+
+        services.kea.dhcp4 = {
           enable = true;
-          resolveLocalQueries = false;
           settings = {
-            port = 0;
-            interface = [ "enp2s0" ];
-            bind-interfaces = true;
-            dhcp-authoritative = true;
-            dhcp-range = [ "192.168.144.1,192.168.144.99,255.255.255.0,12h" ];
-            dhcp-option = [
-              "option:router,192.168.144.254"
-              "option:dns-server,192.168.143.100"
+            interfaces-config.interfaces = [ "enp2s0" ];
+            lease-database = {
+              name = "/var/lib/kea/dhcp4.leases";
+              persist = true;
+              type = "memfile";
+            };
+            valid-lifetime = 43200;
+            renew-timer = 1000;
+            rebind-timer = 2000;
+            subnet4 = [
+              {
+                id = 1;
+                subnet = "192.168.144.0/24";
+                pools.pool = "192.168.144.1 - 192.168.144.99";
+                option-data = [
+                  {
+                    name = "routers";
+                    data = "192.168.144.254";
+                  }
+                  {
+                    name = "domain-name-servers";
+                    data = "192.168.143.100";
+                  }
+                ];
+              }
             ];
           };
         };
