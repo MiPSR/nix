@@ -15,6 +15,7 @@
         nix.enable = false;
 
         networking.defaultGateway = "192.168.143.254";
+        networking.nameservers = [ "192.168.143.100" ];
 
         services.adguardhome = {
           enable = true;
