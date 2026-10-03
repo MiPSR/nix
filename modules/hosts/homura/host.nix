@@ -50,7 +50,8 @@
 
         networking.firewall.extraForwardRules = ''
           ip saddr 192.168.144.0/24 ip daddr 192.168.143.0/24 accept
-          ip saddr 192.168.143.0/24 ip daddr 192.168.144.0/24 ct state established,related accept
+          ip saddr 192.168.143.0/24 ip daddr 192.168.144.0/24 accept
+          oifname "br-services" ct state new,established,related accept
         '';
 
         networking.firewall.interfaces.br-services = {
