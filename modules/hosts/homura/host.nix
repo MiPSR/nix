@@ -88,29 +88,6 @@
           ];
         };
 
-        systemd.services."NetworkManager-wait-online".wantedBy = [ "multi-user.target" ];
-
-        systemd.services."container-adguard" = {
-          after = [
-            "network-online.target"
-            "NetworkManager-wait-online.service"
-          ];
-          wants = [
-            "network-online.target"
-            "NetworkManager-wait-online.service"
-          ];
-        };
-
-        systemd.services."container-minecraft" = {
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
-        };
-
-        systemd.services."container-caddy" = {
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
-        };
-
         services.dnsmasq = {
           enable = true;
           resolveLocalQueries = false;

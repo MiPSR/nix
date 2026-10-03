@@ -63,7 +63,7 @@
       };
     };
 
-    systemd.services."container-minecraft".serviceConfig = {
+    systemd.services."container@minecraft".serviceConfig = {
       CPUWeight = 80;
       MemoryMax = "12G";
     };

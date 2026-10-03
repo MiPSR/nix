@@ -171,7 +171,7 @@
       };
     };
 
-    systemd.services."container-adguard".serviceConfig = {
+    systemd.services."container@adguard".serviceConfig = {
       CPUWeight = 10;
       MemoryMax = "512M";
     };

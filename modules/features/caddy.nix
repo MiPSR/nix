@@ -39,7 +39,7 @@
       };
     };
 
-    systemd.services."container-caddy".serviceConfig = {
+    systemd.services."container@caddy".serviceConfig = {
       CPUWeight = 50;
       MemoryMax = "512M";
     };
