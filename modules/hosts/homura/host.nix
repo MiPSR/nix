@@ -1,10 +1,14 @@
 { self, inputs, ... }: {
   flake.nixosConfigurations.homura = inputs.nixpkgs.lib.nixosSystem {
     modules = [
-      {
+      # Nix needs the parens here: a bare lambda as the first list element
+      # parses as an attrset.
+      ({
         networking.hostName = "homura";
         system.stateVersion = "26.05";
 
+        # Only the physical links live here. Addressing policy for the LAN and
+        # the AP belongs to feature-lan-miyu / feature-wifi-miyu-mini.
         networking.networkmanager.ensureProfiles.profiles = {
           homura-lan = {
             connection = {
@@ -48,118 +52,26 @@
         networking.nftables.enable = true;
         networking.firewall.filterForward = true;
 
-        networking.firewall.extraForwardRules = ''
-          ip saddr 192.168.144.0/24 ip daddr 192.168.143.0/24 accept
-          ip saddr 192.168.143.0/24 ip daddr 192.168.144.0/24 accept
-          oifname "br-services" ct state new,established,related accept
-        '';
-
-        networking.firewall.interfaces.br-services = {
-          allowedTCPPorts = [
-            53
-            80
-            443
-            4000
-            25565
-          ];
-          allowedUDPPorts = [
-            53
-            25565
-          ];
-        };
-
-        networking.nat = {
-          enable = true;
-          internalIPs = [
-            "192.168.144.0/24"
-            "192.168.143.0/24"
-          ];
-          internalInterfaces = [ "br-services" ];
-          externalInterface = "enp3s0";
-          forwardPorts = [
-            {
-              sourcePort = 25565;
-              destination = "192.168.143.110:25565";
-            }
-            {
-              sourcePort = 25565;
-              destination = "192.168.143.110:25565";
-              proto = "udp";
-            }
-          ];
-        };
-
+        # DHCP comes from the two kea containers, never from the dnsmasq that
+        # NetworkManager would otherwise spawn for a shared-mode connection.
         services.dnsmasq.enable = false;
 
         # homura itself resolves via plain Quad9 rather than the ISP resolver.
-        # Clients are pointed at blocky (192.168.143.100) by Kea instead.
+        # LAN clients are pointed at blocky (192.168.143.100) by kea instead.
         networking.nameservers = [
           "9.9.9.9"
           "149.112.112.112"
         ];
 
-        services.kea.dhcp4 = {
-          enable = true;
-          settings = {
-            interfaces-config.interfaces = [ "enp2s0" ];
-            lease-database = {
-              name = "/var/lib/kea/dhcp4.leases";
-              persist = true;
-              type = "memfile";
-            };
-            valid-lifetime = 43200;
-            renew-timer = 21600;
-            rebind-timer = 37800;
-            subnet4 = [
-              {
-                id = 1;
-                subnet = "192.168.144.0/24";
-                interface = "enp2s0";
-                pools = [
-                  {
-                    pool = "192.168.144.1 - 192.168.144.99";
-                  }
-                ];
-                option-data = [
-                  {
-                    name = "routers";
-                    data = "192.168.144.254";
-                  }
-                  {
-                    name = "domain-name-servers";
-                    data = "192.168.143.100";
-                  }
-                  {
-                    name = "domain-name";
-                    data = "lan";
-                  }
-                  {
-                    name = "broadcast-address";
-                    data = "192.168.144.255";
-                  }
-                  {
-                    name = "subnet-mask";
-                    data = "255.255.255.0";
-                  }
-                ];
-              }
-            ];
-          };
-        };
-
-        networking.firewall.interfaces.enp2s0 = {
-          allowedTCPPorts = [ 22 ];
-          allowedUDPPorts = [ 67 ];
-        };
-
         services.openssh = {
           enable = true;
           openFirewall = false;
         };
-      }
+      })
       self.nixosModules.host-homura-hardware
       self.nixosModules.profile-server
-      self.nixosModules.feature-blocky
+      self.nixosModules.feature-lan-miyu
+      self.nixosModules.feature-wifi-miyu-mini
       self.nixosModules.feature-minecraft-server
       self.nixosModules.feature-caddy
     ];

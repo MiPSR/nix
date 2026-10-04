@@ -1,5 +1,10 @@
-{ self, ... }: {
-  flake.nixosModules.feature-blocky = { ... }: {
+{ ... }: {
+  # LAN half of the 미유 network.
+  #
+  # Owns everything on 192.168.143.0/24 (services) and 192.168.144.0/24 (LAN):
+  # DNS (blocky), DHCP (kea), NAT routing and firewall. Kea runs in its own
+  # container so a failure there cannot take out anything outside this feature.
+  flake.nixosModules.feature-lan-miyu = { ... }: {
     containers.blocky = {
       autoStart = true;
       restartIfChanged = true;
@@ -121,9 +126,145 @@
       };
     };
 
+    # Kea shares the host network namespace (privateNetwork defaults to false),
+    # so it can bind enp2s0 directly and hand out leases to real LAN clients
+    # without a bridge or a relay agent. Its firewall and nftables are both
+    # disabled on purpose: in a shared netns either one would flush or fight the
+    # host's own ruleset.
+    containers.lan-kea = {
+      autoStart = true;
+      restartIfChanged = true;
+
+      config = { ... }: {
+        system.stateVersion = "26.05";
+
+        nix.enable = false;
+
+        networking.enableIPv6 = false;
+        networking.firewall.enable = false;
+        networking.nftables.enable = false;
+        networking.useDHCP = false;
+        networking.nameservers = [
+          "9.9.9.9"
+          "149.112.112.112"
+        ];
+
+        services.kea.dhcp4 = {
+          enable = true;
+          settings = {
+            interfaces-config.interfaces = [ "enp2s0" ];
+            lease-database = {
+              name = "/var/lib/kea/dhcp4.leases";
+              persist = true;
+              type = "memfile";
+            };
+            valid-lifetime = 43200;
+            renew-timer = 21600;
+            rebind-timer = 37800;
+            subnet4 = [
+              {
+                id = 1;
+                subnet = "192.168.144.0/24";
+                interface = "enp2s0";
+                pools = [
+                  {
+                    pool = "192.168.144.1 - 192.168.144.99";
+                  }
+                ];
+                option-data = [
+                  {
+                    name = "routers";
+                    data = "192.168.144.254";
+                  }
+                  {
+                    name = "domain-name-servers";
+                    data = "192.168.143.100";
+                  }
+                  {
+                    name = "domain-name";
+                    data = "lan";
+                  }
+                  {
+                    name = "broadcast-address";
+                    data = "192.168.144.255";
+                  }
+                  {
+                    name = "subnet-mask";
+                    data = "255.255.255.0";
+                  }
+                ];
+              }
+            ];
+          };
+        };
+      };
+    };
+
+    networking.nat = {
+      enable = true;
+      externalInterface = "enp3s0";
+      internalIPs = [
+        "192.168.144.0/24"
+        "192.168.143.0/24"
+      ];
+      internalInterfaces = [ "br-services" ];
+      forwardPorts = [
+        {
+          sourcePort = 25565;
+          destination = "192.168.143.110:25565";
+        }
+        {
+          sourcePort = 25565;
+          destination = "192.168.143.110:25565";
+          proto = "udp";
+        }
+      ];
+    };
+
+    networking.firewall.extraForwardRules = ''
+      ip saddr 192.168.144.0/24 ip daddr 192.168.143.0/24 accept
+      ip saddr 192.168.143.0/24 ip daddr 192.168.144.0/24 accept
+      oifname "br-services" ct state new,established,related accept
+    '';
+
+    networking.firewall.interfaces.br-services = {
+      allowedTCPPorts = [
+        53
+        80
+        443
+        4000
+        25565
+      ];
+      allowedUDPPorts = [
+        53
+        25565
+      ];
+    };
+
+    # UDP 67 is the kea container answering on this link; it shares the host
+    # netns, so the host INPUT chain is still what gates it. Everything except
+    # DHCP and ICMP stays closed.
+    networking.firewall.interfaces.enp2s0 = {
+      allowedTCPPorts = [ 22 ];
+      allowedUDPPorts = [ 67 ];
+    };
+
     systemd.services."container@blocky" = {
       after = [ "NetworkManager-ensure-profiles.service" ];
       wants = [ "NetworkManager-ensure-profiles.service" ];
+      startLimitBurst = 3;
+      startLimitIntervalSec = 60;
+    };
+
+    systemd.services."container@lan-kea" = {
+      after = [
+        "NetworkManager-ensure-profiles.service"
+        "network-online.target"
+      ];
+      wants = [
+        "NetworkManager-ensure-profiles.service"
+        "network-online.target"
+      ];
       startLimitBurst = 3;
       startLimitIntervalSec = 60;
     };
