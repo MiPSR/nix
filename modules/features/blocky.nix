@@ -88,11 +88,19 @@
               # Keep this group non-empty on the denylist side: a client whose
               # groups are all allowlist-only flips into exclusive allow mode,
               # which would block the whole internet.
+              #
+              # Must be an indented ('') string, not a plain one: blocky types a
+              # list entry as inline text only if it contains a newline,
+              # otherwise it assumes http(s) URL or *local file path*. A plain
+              # "*.nhentai.net" is read as a filename, fails, and silently
+              # leaves the allowlist empty.
               allowlists.blocklistproject = [
                 # Equivalent to AdGuard's @@||nhentai.net^: the apex plus every
                 # subdomain (i.nhentai.net, t.nhentai.net, ...). porn.txt
                 # contains the apex, so without this allowlist it would block.
-                "*.nhentai.net"
+                ''
+                  *.nhentai.net
+                ''
               ];
 
               # No client name/IP override, so every client gets this group.
