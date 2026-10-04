@@ -91,6 +91,13 @@
 
         services.dnsmasq.enable = false;
 
+        # homura itself resolves via plain Quad9 rather than the ISP resolver.
+        # Clients are pointed at AdGuard (192.168.143.100) by Kea instead.
+        networking.nameservers = [
+          "9.9.9.9"
+          "149.112.112.112"
+        ];
+
         services.kea.dhcp4 = {
           enable = true;
           settings = {
@@ -101,13 +108,18 @@
               type = "memfile";
             };
             valid-lifetime = 43200;
-            renew-timer = 1000;
-            rebind-timer = 2000;
+            renew-timer = 21600;
+            rebind-timer = 37800;
             subnet4 = [
               {
                 id = 1;
                 subnet = "192.168.144.0/24";
-                pools.pool = "192.168.144.1 - 192.168.144.99";
+                interface = "enp2s0";
+                pools = [
+                  {
+                    pool = "192.168.144.1 - 192.168.144.99";
+                  }
+                ];
                 option-data = [
                   {
                     name = "routers";
@@ -116,6 +128,18 @@
                   {
                     name = "domain-name-servers";
                     data = "192.168.143.100";
+                  }
+                  {
+                    name = "domain-name";
+                    data = "lan";
+                  }
+                  {
+                    name = "broadcast-address";
+                    data = "192.168.144.255";
+                  }
+                  {
+                    name = "subnet-mask";
+                    data = "255.255.255.0";
                   }
                 ];
               }

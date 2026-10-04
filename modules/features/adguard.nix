@@ -15,7 +15,12 @@
         nix.enable = false;
 
         networking.defaultGateway = "192.168.143.254";
-        networking.nameservers = [ "192.168.143.100" ];
+        # Plain Quad9 for the container's *own* resolution (upstream hostnames,
+        # bootstrap). Pointing this at AdGuard itself would be a DNS loop.
+        networking.nameservers = [
+          "9.9.9.9"
+          "149.112.112.112"
+        ];
 
         services.adguardhome = {
           enable = true;
