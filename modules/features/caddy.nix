@@ -26,7 +26,7 @@
           openFirewall = false;
 
           # illegal.lan is the only site that has a real address; it is
-          # rewritten to this container by AdGuard. The :80 catch-all keeps
+          # rewritten to this container by blocky. The :80 catch-all keeps
           # something sane for direct-IP visits, so it has to come last.
           configFile = pkgs.writeText "Caddyfile" ''
             http://illegal.lan {

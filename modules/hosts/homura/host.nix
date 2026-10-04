@@ -59,7 +59,7 @@
             53
             80
             443
-            3000
+            4000
             25565
           ];
           allowedUDPPorts = [
@@ -92,7 +92,7 @@
         services.dnsmasq.enable = false;
 
         # homura itself resolves via plain Quad9 rather than the ISP resolver.
-        # Clients are pointed at AdGuard (192.168.143.100) by Kea instead.
+        # Clients are pointed at blocky (192.168.143.100) by Kea instead.
         networking.nameservers = [
           "9.9.9.9"
           "149.112.112.112"
@@ -159,7 +159,7 @@
       }
       self.nixosModules.host-homura-hardware
       self.nixosModules.profile-server
-      self.nixosModules.feature-adguard
+      self.nixosModules.feature-blocky
       self.nixosModules.feature-minecraft-server
       self.nixosModules.feature-caddy
     ];
