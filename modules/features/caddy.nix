@@ -25,8 +25,9 @@
           enable = true;
           openFirewall = false;
 
-          # Blocked domains resolve to this container (AdGuard's custom_ip) and
-          # are told apart by Host header, so the catch-all has to come last.
+          # illegal.lan is the only site that has a real address; it is
+          # rewritten to this container by AdGuard. The :80 catch-all keeps
+          # something sane for direct-IP visits, so it has to come last.
           configFile = pkgs.writeText "Caddyfile" ''
             http://illegal.lan {
               respond "<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Blocked</title><style>html,body{height:100%;margin:0}body{background:#0b3d3a;display:flex;align-items:center;justify-content:center}h1{color:#fff;font:900 10vw/1.05 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;text-align:center;max-width:92vw;text-shadow:-3px -3px 0 #000,3px -3px 0 #000,-3px 3px 0 #000,3px 3px 0 #000,0 0 28px #000,0 0 60px #000}</style></head><body><h1>This website is not allowed</h1></body></html>" 403

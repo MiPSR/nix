@@ -55,15 +55,18 @@
 
             filtering = {
               filtering_enabled = true;
-              # DNS can only answer with an IP, so blocked domains resolve to
-              # caddy, which serves the block pages based on the Host header.
-              blocking_mode = "custom_ip";
-              blocking_ipv4 = "192.168.143.101";
-              blocking_ipv6 = "::";
+              # Blocked domains are dead-resolved (0.0.0.0 / ::), browsers never
+              # reach them, so no block page can be shown over HTTPS.
+              blocking_mode = "default";
+              # Both flags default to false when absent from the YAML, which
+              # makes AdGuard parse the rewrites below and then silently ignore
+              # them. Only wizard-generated configs get the true default.
+              rewrites_enabled = true;
               rewrites = [
                 {
                   domain = "illegal.lan";
                   answer = "192.168.143.101";
+                  enabled = true;
                 }
               ];
             };
