@@ -22,6 +22,16 @@
           "149.112.112.112"
         ];
 
+        # NixOS enables the container's own firewall by default, and it drops
+        # everything but ICMP. The host's allowed*Ports on br-services only open
+        # the host INPUT chain, they do not reach into this netns, so LAN
+        # clients (and LAN -> services forwarding) have to be opened here.
+        networking.firewall.allowedTCPPorts = [
+          53
+          3000
+        ];
+        networking.firewall.allowedUDPPorts = [ 53 ];
+
         services.adguardhome = {
           enable = true;
           mutableSettings = false;

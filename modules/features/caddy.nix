@@ -17,6 +17,10 @@
         networking.defaultGateway = "192.168.143.254";
         networking.nameservers = [ "192.168.143.100" ];
 
+        # Container-local firewall defaults to drop; the host's br-services
+        # allowed*Ports do not reach into this netns.
+        networking.firewall.allowedTCPPorts = [ 80 ];
+
         services.caddy = {
           enable = true;
           openFirewall = false;
