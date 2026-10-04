@@ -55,7 +55,17 @@
 
             filtering = {
               filtering_enabled = true;
-              blocking_mode = "default";
+              # DNS can only answer with an IP, so blocked domains resolve to
+              # caddy, which serves the block pages based on the Host header.
+              blocking_mode = "custom_ip";
+              blocking_ipv4 = "192.168.143.101";
+              blocking_ipv6 = "::";
+              rewrites = [
+                {
+                  domain = "illegal.lan";
+                  answer = "192.168.143.101";
+                }
+              ];
             };
 
             filters = [
