@@ -63,8 +63,9 @@
   };
 
   flake.nixosModules.feature-twm = { config, lib, pkgs, ... }: {
-    # gui.nix turns xorg off for the wayland hosts.
-    services.xserver.enable = lib.mkForce true;
+    services.xserver.enable = true;
+
+    services.xserver.displayManager.startx.enable = true;
 
     services.xserver.windowManager.session = [
       {

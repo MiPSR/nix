@@ -10,7 +10,6 @@
       librewolf
       qtscrcpy
       stoat-desktop
-      xinit
     ];
 
     fonts = {
@@ -78,7 +77,6 @@
       };
       power-profiles-daemon.enable = true;
       udisks2.enable = true;
-      xserver.enable = false;
     };
   };
 }
