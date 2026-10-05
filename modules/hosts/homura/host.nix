@@ -88,6 +88,12 @@
         networking.nftables.enable = true;
         networking.firewall.filterForward = true;
 
+        # Without this the bridge floods DHCP broadcasts into the forward
+        # chain, which has policy drop and no rule for src 0.0.0.0, so the
+        # kea containers never see them. Bridged frames stay pure L2; routed
+        # traffic (WiFi containment, NAT) still hits netfilter normally.
+        boot.kernel.sysctl."net.bridge.bridge-nf-call-iptables" = 0;
+
         # DHCP comes from the two kea containers, never from the dnsmasq that
         # NetworkManager would otherwise spawn for a shared-mode connection.
         services.dnsmasq.enable = false;
