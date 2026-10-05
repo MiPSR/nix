@@ -8,8 +8,14 @@
       self.nixosModules.host-ui-hardware
       self.nixosModules.profile-pc
       self.nixosModules.profile-plasma
+      self.nixosModules.feature-cinnamon
+      self.nixosModules.feature-dmenu
+      self.nixosModules.feature-twm
       #self.nixosModules.feature-umbriel-m
       self.nixosModules.feature-niri-m
+      ({ pkgs, ... }: {
+        environment.systemPackages = [ pkgs._86box-with-roms ];
+      })
     ];
   };
 }

@@ -92,7 +92,7 @@
                   <dt>Gateway</dt><dd><code>192.168.100.254</code></dd>
                   <dt>DHCP server</dt><dd><code>192.168.100.100</code></dd>
                   <dt>Pool</dt><dd><code>192.168.100.1 - 192.168.100.99</code></dd>
-                  <dt>DNS</dt><dd><code>9.9.9.9</code>, <code>149.112.112.112</code> (Quad9, unencrypted)</dd>
+                  <dt>DNS</dt><dd><code>192.168.200.100</code> (blocky, Cloudflare DoT/DoH)</dd>
                   <dt>Radio</dt><dd><code>wlp0s20f0u6</code>, 2.4 GHz, channel 6</dd>
                   <dt>Security</dt><dd>WPA3-Personal (SAE), CCMP, PMF required</dd>
                 </dl>
@@ -105,13 +105,16 @@
                 <dl>
                   <dt>Network</dt><dd><code>192.168.244.0/24</code> on <code>bridge_services</code></dd>
                   <dt>DNS</dt><dd><code>192.168.244.100</code> blocky</dd>
+                  <dt>Blocky API</dt><dd><code>192.168.244.100:4000</code></dd>
                   <dt>This page</dt><dd><code>192.168.244.101</code> caddy, as <code>info.lan</code></dd>
                   <dt>Minecraft</dt><dd><code>192.168.244.110</code>, published on 25565</dd>
                 </dl>
               </section>
 
-              <footer>WiFi clients reach the internet and this page. They cannot reach
-              the LAN or the services network.</footer>
+              <footer>WiFi clients reach the internet, this page and their own
+              resolver on <code>192.168.200.100</code>. They cannot reach the
+              LAN; on the services network only this page and the blocky API
+              are open to them.</footer>
             </div>
             </body>
             </html>

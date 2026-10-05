@@ -181,7 +181,6 @@
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/redirect.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/scam.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/smart-tv.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/twitter.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/urlshortener.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/youtube.txt"
               ];
@@ -219,7 +218,8 @@
               rate = 20;
             };
 
-            # The dashboard lives on the caddy container next door.
+            # info.lan/illegal.lan land on the caddy container next door; this
+            # resolver's own API/metrics answer here on 192.168.244.100:4000.
             customDNS.mapping."info.lan" = "192.168.244.101";
             customDNS.mapping."illegal.lan" = "192.168.244.101";
           };

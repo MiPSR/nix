@@ -52,6 +52,27 @@
             ipv6.method = "disabled";
           };
 
+          # 192.168.200.0/24 - WiFi DNS only. No physical port: the wifi blocky
+          # attaches over veth, and AP clients reach it by routing through .254.
+          # Deliberately separate from bridge_wifi_100 so LAN and WiFi never
+          # share a resolver, and from bridge_services so the WiFi side has no
+          # path to the LAN blocky.
+          bridge_wifi_200 = {
+            connection = {
+              id = "bridge_wifi_200";
+              uuid = "1a2b3c4d-0000-4000-8000-000000000005";
+              type = "bridge";
+              interface-name = "bridge_wifi_200";
+              autoconnect = true;
+            };
+            bridge.stp = false;
+            ipv4 = {
+              method = "manual";
+              addresses = "192.168.200.254/24";
+            };
+            ipv6.method = "disabled";
+          };
+
           # 192.168.244.0/24 - container-only network. No physical port: blocky,
           # caddy and minecraft attach over veth. Reachable from the LAN but
           # never from the WiFi side.
