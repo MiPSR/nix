@@ -1,16 +1,112 @@
 { ... }: {
   # LAN half of the 미유 network.
   #
-  # Owns everything on 192.168.143.0/24 (services) and 192.168.144.0/24 (LAN):
-  # DNS (blocky), DHCP (kea), NAT routing and firewall. Kea runs in its own
-  # container so a failure there cannot take out anything outside this feature.
+  # Two networks live here:
+  #   192.168.144.0/24  wired LAN - homura .254, kea container .100, clients .1-.99
+  #   192.168.244.0/24  container services - homura .254, blocky .100
+  #
+  # The kea container is private (own network namespace, own address) but is
+  # bridged onto the same wire as the clients, so DHCP broadcasts reach it with
+  # no relay agent. That is the whole point: a kea server on a *routed* subnet
+  # cannot hear DHCP at all.
   flake.nixosModules.feature-lan-miyu = { ... }: {
+    # enp2s0 becomes a port of bridge_lan_144. Its address moves to the bridge,
+    # so it must not keep one of its own.
+    networking.networkmanager.ensureProfiles.profiles.lan-port = {
+      connection = {
+        id = "lan-port";
+        uuid = "1a2b3c4d-0000-4000-8000-000000000011";
+        type = "ethernet";
+        interface-name = "enp2s0";
+        master = "1a2b3c4d-0000-4000-8000-000000000001";
+        autoconnect = true;
+      };
+      bridge-port = {
+        path-cost = 100;
+      };
+      ipv4.method = "disabled";
+      ipv6.method = "disabled";
+    };
+
+    containers.lan-kea = {
+      autoStart = true;
+      restartIfChanged = true;
+      privateNetwork = true;
+      hostBridge = "bridge_lan_144";
+      localAddress = "192.168.144.100/24";
+
+      config = { ... }: {
+        system.stateVersion = "26.05";
+
+        networking.enableIPv6 = false;
+        nix.enable = false;
+
+        networking.defaultGateway = "192.168.144.254";
+        networking.nameservers = [ "192.168.244.100" ];
+
+        # Only DHCP in. The host's allowed*Ports on bridge_lan_144 cannot reach
+        # into this namespace, so they have to be opened here.
+        networking.firewall.allowedUDPPorts = [ 67 ];
+
+        services.kea.dhcp4 = {
+          enable = true;
+          settings = {
+            # eth0 is the container's veth end. Inside a private namespace the
+            # physical port is invisible, so kea has to be told the veth name.
+            interfaces-config.interfaces = [ "eth0" ];
+            lease-database = {
+              name = "/var/lib/kea/dhcp4.leases";
+              persist = true;
+              type = "memfile";
+            };
+            valid-lifetime = 43200;
+            renew-timer = 21600;
+            rebind-timer = 37800;
+            subnet4 = [
+              {
+                id = 1;
+                subnet = "192.168.144.0/24";
+                interface = "eth0";
+                pools = [
+                  {
+                    pool = "192.168.144.1 - 192.168.144.99";
+                  }
+                ];
+                option-data = [
+                  {
+                    name = "routers";
+                    data = "192.168.144.254";
+                  }
+                  {
+                    name = "domain-name-servers";
+                    data = "192.168.244.100";
+                  }
+                  {
+                    name = "domain-name";
+                    data = "lan";
+                  }
+                  {
+                    name = "broadcast-address";
+                    data = "192.168.144.255";
+                  }
+                  {
+                    name = "subnet-mask";
+                    data = "255.255.255.0";
+                  }
+                ];
+              }
+            ];
+          };
+        };
+      };
+    };
+
     containers.blocky = {
       autoStart = true;
       restartIfChanged = true;
       privateNetwork = true;
-      hostBridge = "br-services";
-      localAddress = "192.168.143.100/24";
+      hostBridge = "bridge_services";
+      localAddress = "192.168.244.100/24";
 
       config = { ... }: {
         system.stateVersion = "26.05";
@@ -19,7 +115,7 @@
 
         nix.enable = false;
 
-        networking.defaultGateway = "192.168.143.254";
+        networking.defaultGateway = "192.168.244.254";
         # Plain Quad9 for the container's *own* resolution (upstream hostnames,
         # blocklist URLs, bootstrap). Pointing this at blocky itself would be a
         # DNS loop.
@@ -29,8 +125,8 @@
         ];
 
         # NixOS enables the container's own firewall by default, and it drops
-        # everything but ICMP. The host's allowed*Ports on br-services only open
-        # the host INPUT chain, they do not reach into this netns, so LAN
+        # everything but ICMP. The host's allowed*Ports on bridge_services only
+        # open the host INPUT chain, they do not reach into this netns, so LAN
         # clients (and LAN -> services forwarding) have to be opened here.
         networking.firewall.allowedTCPPorts = [
           53
@@ -44,8 +140,8 @@
           settings = {
             # Only listen on the container address; a wildcard bind would also
             # answer on the loopback/bridge interfaces inside the netns.
-            ports.dns = "192.168.143.100:53";
-            ports.http = "192.168.143.100:4000";
+            ports.dns = "192.168.244.100:53";
+            ports.http = "192.168.244.100:4000";
 
             # Blocked domains are dead-resolved (0.0.0.0 / ::), browsers never
             # reach them, so no block page can be shown over HTTPS. blocky is
@@ -106,6 +202,9 @@
                 ''
                   *.nhentai.net
                 ''
+                ''
+                  *.saucenao.com
+                ''
               ];
 
               # No client name/IP override, so every client gets this group.
@@ -120,81 +219,9 @@
               rate = 20;
             };
 
-            customDNS.mapping."illegal.lan" = "192.168.143.101";
-          };
-        };
-      };
-    };
-
-    # Kea shares the host network namespace (privateNetwork defaults to false),
-    # so it can bind enp2s0 directly and hand out leases to real LAN clients
-    # without a bridge or a relay agent. Its firewall and nftables are both
-    # disabled on purpose: in a shared netns either one would flush or fight the
-    # host's own ruleset.
-    containers.lan-kea = {
-      autoStart = true;
-      restartIfChanged = true;
-
-      config = { ... }: {
-        system.stateVersion = "26.05";
-
-        nix.enable = false;
-
-        networking.enableIPv6 = false;
-        networking.firewall.enable = false;
-        networking.nftables.enable = false;
-        networking.useDHCP = false;
-        networking.nameservers = [
-          "9.9.9.9"
-          "149.112.112.112"
-        ];
-
-        services.kea.dhcp4 = {
-          enable = true;
-          settings = {
-            interfaces-config.interfaces = [ "enp2s0" ];
-            lease-database = {
-              name = "/var/lib/kea/dhcp4.leases";
-              persist = true;
-              type = "memfile";
-            };
-            valid-lifetime = 43200;
-            renew-timer = 21600;
-            rebind-timer = 37800;
-            subnet4 = [
-              {
-                id = 1;
-                subnet = "192.168.144.0/24";
-                interface = "enp2s0";
-                pools = [
-                  {
-                    pool = "192.168.144.1 - 192.168.144.99";
-                  }
-                ];
-                option-data = [
-                  {
-                    name = "routers";
-                    data = "192.168.144.254";
-                  }
-                  {
-                    name = "domain-name-servers";
-                    data = "192.168.143.100";
-                  }
-                  {
-                    name = "domain-name";
-                    data = "lan";
-                  }
-                  {
-                    name = "broadcast-address";
-                    data = "192.168.144.255";
-                  }
-                  {
-                    name = "subnet-mask";
-                    data = "255.255.255.0";
-                  }
-                ];
-              }
-            ];
+            # The dashboard lives on the caddy container next door.
+            customDNS.mapping."info.lan" = "192.168.244.101";
+            customDNS.mapping."illegal.lan" = "192.168.244.101";
           };
         };
       };
@@ -205,29 +232,41 @@
       externalInterface = "enp3s0";
       internalIPs = [
         "192.168.144.0/24"
-        "192.168.143.0/24"
+        "192.168.244.0/24"
       ];
-      internalInterfaces = [ "br-services" ];
+      internalInterfaces = [
+        "bridge_lan_144"
+        "bridge_services"
+      ];
       forwardPorts = [
         {
           sourcePort = 25565;
-          destination = "192.168.143.110:25565";
+          destination = "192.168.244.110:25565";
         }
         {
           sourcePort = 25565;
-          destination = "192.168.143.110:25565";
+          destination = "192.168.244.110:25565";
           proto = "udp";
         }
       ];
     };
 
+    # LAN reaches the services bridge and back. The WiFi feature adds its own
+    # rules; none of them overlap with these.
     networking.firewall.extraForwardRules = ''
-      ip saddr 192.168.144.0/24 ip daddr 192.168.143.0/24 accept
-      ip saddr 192.168.143.0/24 ip daddr 192.168.144.0/24 accept
-      oifname "br-services" ct state new,established,related accept
+      ip saddr 192.168.144.0/24 ip daddr 192.168.244.0/24 accept
+      ip saddr 192.168.244.0/24 ip daddr 192.168.144.0/24 accept
     '';
 
-    networking.firewall.interfaces.br-services = {
+    # An interfaces.<iface> entry with no ports drops everything on that link
+    # except established/related, so SSH is the only thing the LAN can reach on
+    # homura itself. DHCP is not listed: the kea container answers directly on
+    # the bridge and never traverses the host's INPUT chain.
+    networking.firewall.interfaces.bridge_lan_144 = {
+      allowedTCPPorts = [ 22 ];
+    };
+
+    networking.firewall.interfaces.bridge_services = {
       allowedTCPPorts = [
         53
         80
@@ -239,14 +278,6 @@
         53
         25565
       ];
-    };
-
-    # UDP 67 is the kea container answering on this link; it shares the host
-    # netns, so the host INPUT chain is still what gates it. Everything except
-    # DHCP and ICMP stays closed.
-    networking.firewall.interfaces.enp2s0 = {
-      allowedTCPPorts = [ 22 ];
-      allowedUDPPorts = [ 67 ];
     };
 
     systemd.services."container@blocky" = {

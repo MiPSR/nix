@@ -4,8 +4,8 @@
       autoStart = true;
       restartIfChanged = true;
       privateNetwork = true;
-      hostBridge = "br-services";
-      localAddress = "192.168.143.110/24";
+      hostBridge = "bridge_services";
+      localAddress = "192.168.244.110/24";
 
       config = { pkgs, ... }: {
         system.stateVersion = "26.05";
@@ -14,10 +14,10 @@
 
         nix.enable = false;
 
-        networking.defaultGateway = "192.168.143.254";
-        networking.nameservers = [ "192.168.143.100" ];
+        networking.defaultGateway = "192.168.244.254";
+        networking.nameservers = [ "192.168.244.100" ];
 
-        # Container-local firewall defaults to drop; the host's br-services
+        # Container-local firewall defaults to drop; the host's bridge_services
         # allowed*Ports do not reach into this netns.
         networking.firewall.allowedTCPPorts = [ 25565 ];
         networking.firewall.allowedUDPPorts = [ 25565 ];
