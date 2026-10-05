@@ -10,6 +10,7 @@
       librewolf
       qtscrcpy
       stoat-desktop
+      xinit
     ];
 
     fonts = {
