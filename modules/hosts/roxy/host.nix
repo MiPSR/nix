@@ -7,7 +7,6 @@
       self.nixosModules.feature-vr
       self.nixosModules.host-roxy-hardware
       self.nixosModules.profile-pc
-      self.nixosModules.profile-gnome
     ];
   };
 }

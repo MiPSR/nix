@@ -4,16 +4,12 @@
       { networking.hostName = "ui"; system.stateVersion = "26.05"; }
       self.nixosModules.feature-amdgpu
       self.nixosModules.feature-games
+      self.nixosModules.feature-retro
       self.nixosModules.feature-vr
       self.nixosModules.host-ui-hardware
       self.nixosModules.profile-pc
-      self.nixosModules.profile-plasma
       self.nixosModules.feature-cinnamon
-      self.nixosModules.feature-dmenu
-      self.nixosModules.feature-twm
-      ({ pkgs, ... }: {
-        environment.systemPackages = [ pkgs._86box-with-roms ];
-
+      ({ ... }: {
         services.pipewire.extraConfig.pipewire."50-clock" = {
           "context.properties" = {
             "clock.power-of-two-quantum" = false;
