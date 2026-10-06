@@ -51,18 +51,13 @@
     i18n.inputMethod = {
       enable = true;
 
-      fcitx5 = {
-        addons = with pkgs; [ fcitx5-mozc ];
-        waylandFrontend = true;
-      };
+      fcitx5.addons = with pkgs; [ fcitx5-mozc ];
       type = "fcitx5";
     };
 
     security.rtkit.enable = true;
 
     services = {
-      displayManager.noctalia-greeter.enable = true;
-
       pipewire = {
         alsa = {
           enable = true;

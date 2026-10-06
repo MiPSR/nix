@@ -9,6 +9,8 @@
 
     services.displayManager.defaultSession = "plasma";
 
+    services.displayManager.plasma-login-manager.enable = true;
+
     environment.systemPackages = with pkgs; [
       kdePackages.falkon
       kdePackages.kaddressbook

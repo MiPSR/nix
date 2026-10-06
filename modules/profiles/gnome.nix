@@ -8,6 +8,8 @@
 
     services.displayManager.defaultSession = "gnome";
 
+    services.displayManager.gdm.enable = true;
+
     environment.systemPackages = with pkgs; [
       evolution
     ];

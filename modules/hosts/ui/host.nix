@@ -11,10 +11,21 @@
       self.nixosModules.feature-cinnamon
       self.nixosModules.feature-dmenu
       self.nixosModules.feature-twm
-      #self.nixosModules.feature-umbriel-m
-      self.nixosModules.feature-niri-m
       ({ pkgs, ... }: {
         environment.systemPackages = [ pkgs._86box-with-roms ];
+
+        services.pipewire.extraConfig.pipewire."50-clock" = {
+          "context.properties" = {
+            "clock.power-of-two-quantum" = false;
+            "default.clock.allowed-rates" = [
+              192000
+              44100
+            ];
+            "default.clock.min-quantum" = 256;
+            "default.clock.quantum" = 256;
+            "default.clock.rate" = 192000;
+          };
+        };
       })
     ];
   };
