@@ -52,7 +52,9 @@
           # Container-local firewall defaults to drop; the host's
           # bridge_services allowed*Ports do not reach into this netns. Only
           # caddy, next door on the same bridge, needs to reach this.
-          networking.firewall.allowedTCPPorts = [ 80 ];
+          networking.firewall.allowedTCPPorts = [
+            8222
+          ];
 
           users.users.vaultwarden.uid = vaultwardenUid;
           users.groups.vaultwarden.gid = vaultwardenUid;
@@ -71,7 +73,7 @@
               # that would leave the server bound to an address it does not
               # have.
               ROCKET_ADDRESS = "0.0.0.0";
-              ROCKET_PORT = 80;
+              
 
               # caddy proxies websockets transparently, but vaultwarden only
               # serves the notification hub when this is on.
