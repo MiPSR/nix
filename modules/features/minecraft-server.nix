@@ -33,9 +33,10 @@
           isSystemUser = true;
           group = "minecraft";
           home = "/var/lib/minecraft";
+          uid = 999;
         };
 
-        users.groups.minecraft = { };
+        users.groups.minecraft.gid = 999;
 
         systemd.tmpfiles.rules = [ "d /var/lib/minecraft 0770 minecraft minecraft -" ];
 
