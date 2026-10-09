@@ -222,6 +222,13 @@
             # resolver's own API/metrics answer here on 192.168.244.100:4000.
             customDNS.mapping."info.lan" = "192.168.244.101";
             customDNS.mapping."illegal.lan" = "192.168.244.101";
+
+            # The ISP box on the WAN link answers this name for its own admin
+            # UI: any http/https request to 192.168.1.254 is 302'd to
+            # https://mabbox.bytel.fr/. Quad9 and Cloudflare both NXDOMAIN it -
+            # it only exists in the box's own resolver - so without a static
+            # map here every LAN client stalls on that redirect.
+            customDNS.mapping."mabbox.bytel.fr" = "192.168.1.254";
           };
         };
       };
