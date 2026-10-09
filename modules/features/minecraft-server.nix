@@ -45,7 +45,7 @@
           wantedBy = [ "multi-user.target" ];
 
           path = [
-            pkgs.jdk
+            pkgs.jdk25_headless
             pkgs.coreutils
           ];
 
@@ -53,7 +53,7 @@
             User = "minecraft";
             Group = "minecraft";
             WorkingDirectory = "/var/lib/minecraft";
-            ExecStart = "${pkgs.jdk}/bin/java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+DisableExplicitGC -jar server.jar nogui";
+            ExecStart = "${pkgs.jdk25_headless}/bin/java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+DisableExplicitGC -jar server.jar nogui";
             Restart = "on-failure";
             RestartSec = 10;
             SuccessExitStatus = [
