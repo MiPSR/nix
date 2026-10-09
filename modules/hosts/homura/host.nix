@@ -137,6 +137,7 @@
       self.nixosModules.feature-wifi-miyu-mini
       self.nixosModules.feature-minecraft-server
       self.nixosModules.feature-caddy
+      self.nixosModules.feature-vaultwarden
     ];
   };
 }

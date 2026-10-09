@@ -1,5 +1,5 @@
 { self, ... }: {
-  flake.nixosModules.feature-caddy = { ... }: {
+  flake.nixosModules.feature-caddy = { lib, ... }: {
     containers.caddy = {
       autoStart = true;
       restartIfChanged = true;
@@ -133,7 +133,12 @@
           # Container-local firewall defaults to drop; the host's
           # bridge_services allowed*Ports do not reach into this netns. The
           # dashboard answers to the LAN and to the WiFi side, nothing else.
-          networking.firewall.allowedTCPPorts = [ 80 ];
+          # 80 is the dashboard, 443 is vault.cunny.fr: caddy terminates TLS
+          # with a Let's Encrypt certificate it fetches itself.
+          networking.firewall.allowedTCPPorts = [
+            80
+            443
+          ];
 
           services.caddy = {
             enable = true;
@@ -148,10 +153,32 @@
               ${dashboard}
               HTMLDASH 200
               }
+
+              # The public entry point. Caddy fetches its own certificate over
+              # ACME, so both 80 and 443 have to reach this container from the
+              # internet (see networking.nat.forwardPorts below). The websocket
+              # notification hub is proxied transparently.
+              vault.cunny.fr {
+                reverse_proxy 192.168.244.120:80
+              }
             '';
           };
         };
     };
+
+    # Public traffic arrives on the WAN port and has to be handed to the caddy
+    # container. forwardPorts is a list option, so this concatenates with the
+    # minecraft entry feature-lan-miyu owns rather than replacing it.
+    networking.nat.forwardPorts = [
+      {
+        sourcePort = 80;
+        destination = "192.168.244.101:80";
+      }
+      {
+        sourcePort = 443;
+        destination = "192.168.244.101:443";
+      }
+    ];
 
     systemd.services."container@caddy" = {
       after = [ "NetworkManager-ensure-profiles.service" ];
