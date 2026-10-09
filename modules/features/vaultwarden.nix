@@ -53,7 +53,7 @@
           # bridge_services allowed*Ports do not reach into this netns. Only
           # caddy, next door on the same bridge, needs to reach this.
           networking.firewall.allowedTCPPorts = [
-            8222
+            8000
           ];
 
           users.users.vaultwarden.uid = vaultwardenUid;

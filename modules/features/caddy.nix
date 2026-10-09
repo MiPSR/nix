@@ -159,7 +159,7 @@
               # internet (see networking.nat.forwardPorts below). The websocket
               # notification hub is proxied transparently.
               vault.cunny.fr {
-                reverse_proxy 192.168.244.120:8222
+                reverse_proxy 192.168.244.120:8000
               }
             '';
           };
