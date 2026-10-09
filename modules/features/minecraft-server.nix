@@ -7,6 +7,13 @@
       hostBridge = "bridge_services";
       localAddress = "192.168.244.110/24";
 
+      # Worlds live on the host, outside the container root, so they survive a
+      # rebuild of the container. Same path on both sides.
+      bindMounts."/var/lib/minecraft" = {
+        hostPath = "/var/lib/minecraft";
+        isReadOnly = false;
+      };
+
       config = { pkgs, ... }: {
         system.stateVersion = "26.05";
 
