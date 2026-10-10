@@ -218,10 +218,11 @@
               rate = 20;
             };
 
-            # info.lan/illegal.lan land on the caddy container next door; this
+            # info.lan/illegal.lan/hass.lan land on the caddy container next door; this
             # resolver's own API/metrics answer here on 192.168.244.100:4000.
             customDNS.mapping."info.lan" = "192.168.244.101";
             customDNS.mapping."illegal.lan" = "192.168.244.101";
+            customDNS.mapping."hass.lan" = "192.168.244.101";
 
             # The ISP box on the WAN link answers this name for its own admin
             # UI: any http/https request to 192.168.1.254 is 302'd to

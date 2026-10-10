@@ -228,6 +228,10 @@
 
               loading.refreshPeriod = "24h";
             };
+
+            # hass.lan lands on the caddy container, same as info.lan does on
+            # the LAN side, so WiFi phones reach the lights dashboard.
+            customDNS.mapping."hass.lan" = "192.168.244.101";
           };
         };
       };

@@ -161,6 +161,13 @@
               vault.cunny.fr {
                 reverse_proxy 192.168.244.120:8000
               }
+
+              # Home Assistant sits on the wifi bridge next to the bulbs;
+              # phones reach it through here as hass.lan. Websockets for
+              # the frontend are proxied transparently.
+              http://hass.lan {
+                reverse_proxy 192.168.100.110:8123
+              }
             '';
           };
         };
