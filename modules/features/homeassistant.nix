@@ -35,7 +35,7 @@
 
           extraComponents = [
             "tplink"
-            "dhcp"
+            "mobile_app"
             "zeroconf"
           ];
 
@@ -46,6 +46,8 @@
             };
             frontend = { };
             config = { };
+            mobile_app = { };
+            zeroconf = { };
           };
         };
       };
