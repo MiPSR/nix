@@ -9,29 +9,28 @@
       librewolf
       qtscrcpy
       stoat-desktop
-      vesktop
     ];
 
     fonts = {
       fontDir.enable = true;
 
       fontconfig = {
-        enable = true;
         defaultFonts = {
-          serif = [
-            "Roboto Serif"
-            "Noto Serif CJK JP"
+          emoji = [ "Noto Color Emoji" ];
+          monospace = [
+            "Roboto Mono"
+            "RobotoMono Nerd Font"
           ];
           sansSerif = [
-            "Roboto"
             "Noto Sans CJK JP"
+            "Roboto"
           ];
-          monospace = [
-            "RobotoMono Nerd Font"
-            "Roboto Mono"
+          serif = [
+            "Noto Serif CJK JP"
+            "Roboto Serif"
           ];
-          emoji = [ "Noto Color Emoji" ];
         };
+        enable = true;
       };
 
       packages = with pkgs; [
@@ -50,8 +49,10 @@
 
     i18n.inputMethod = {
       enable = true;
-
-      fcitx5.addons = with pkgs; [ fcitx5-mozc ];
+      fcitx5 = {
+        addons = with pkgs; [ fcitx5-mozc ];
+        waylandFrontend = true;
+      };
       type = "fcitx5";
     };
 
@@ -63,24 +64,12 @@
           enable = true;
           support32Bit = true;
         };
-
         enable = true;
-
         jack.enable = true;
-
         pulse.enable = true;
       };
       power-profiles-daemon.enable = true;
       udisks2.enable = true;
-
-      xserver = {
-        displayManager.lightdm = {
-          enable = true;
-          greeters.slick.enable = true;
-        };
-
-        enable = true;
-      };
     };
   };
 }

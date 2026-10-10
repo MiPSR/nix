@@ -5,6 +5,7 @@
     imports = [
       self.nixosModules.feature-base
       self.nixosModules.feature-gui
+      self.nixosModules.feature-plasma
       self.nixosModules.feature-user-m
     ];
   };
