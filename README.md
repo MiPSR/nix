@@ -48,3 +48,11 @@ Defined for the **Nushell** shell.
 * `ll`: list files in long format (`ls -l`).
 * `lla`: list all files in long format (`ls -la`).
 * `overdo`: `sudo`.
+
+## Container Bind Mounts
+
+| Container | Host Path | Container Path | Read-Only |
+|-----------|-----------|----------------|-----------|
+| vaultwarden | /var/lib/vaultwarden | /var/lib/vaultwarden | false |
+| vaultwarden | /etc/vaultwarden/secrets.env | /run/secrets/vaultwarden.env | true |
+| minecraft | /var/lib/minecraft | /var/lib/minecraft | false |

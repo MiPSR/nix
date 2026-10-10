@@ -1,7 +1,6 @@
 { ... }: {
   flake.nixosModules.feature-gui = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
-      #collabora-desktop
       alsa-utils
       darktable
       (discord.override { withVencord = true; })

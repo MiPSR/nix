@@ -7,8 +7,6 @@
       hostBridge = "bridge_services";
       localAddress = "192.168.244.110/24";
 
-      # Worlds live on the host, outside the container root, so they survive a
-      # rebuild of the container. Same path on both sides.
       bindMounts."/var/lib/minecraft" = {
         hostPath = "/var/lib/minecraft";
         isReadOnly = false;
@@ -24,8 +22,6 @@
         networking.defaultGateway = "192.168.244.254";
         networking.nameservers = [ "192.168.244.100" ];
 
-        # Container-local firewall defaults to drop; the host's bridge_services
-        # allowed*Ports do not reach into this netns.
         networking.firewall.allowedTCPPorts = [ 25565 ];
         networking.firewall.allowedUDPPorts = [ 25565 ];
 

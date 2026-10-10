@@ -3,12 +3,13 @@
     modules = [
       { networking.hostName = "ui"; system.stateVersion = "26.05"; }
       self.nixosModules.feature-amdgpu
+      self.nixosModules.feature-cinnamon
       self.nixosModules.feature-games
       self.nixosModules.feature-retro
       self.nixosModules.feature-vr
+      self.nixosModules.feature-mate
       self.nixosModules.host-ui-hardware
       self.nixosModules.profile-pc
-      self.nixosModules.feature-cinnamon
       ({ ... }: {
         services.pipewire.extraConfig.pipewire."50-clock" = {
           "context.properties" = {

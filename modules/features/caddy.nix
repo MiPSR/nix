@@ -10,15 +10,6 @@
       config =
         { pkgs, ... }:
         let
-          # A genuinely static page: no file server, no proxy, no script, no
-          # runtime data path to maintain.
-          #
-          # It reports configuration, not live leases. Kea 3.2 removed the
-          # control agent (services.kea.ctrl-agent is a mkRemovedOptionModule
-          # and there is no kea-ctrl-agent binary in the package), so there is
-          # no REST API to poll; reading the memfile lease database would mean
-          # bind-mounting it into this container and templating, which is more
-          # machinery than the page is worth.
           dashboard = ''
             <!DOCTYPE html>
             <html lang='en'>
@@ -130,11 +121,6 @@
           networking.defaultGateway = "192.168.244.254";
           networking.nameservers = [ "192.168.244.100" ];
 
-          # Container-local firewall defaults to drop; the host's
-          # bridge_services allowed*Ports do not reach into this netns. The
-          # dashboard answers to the LAN and to the WiFi side, nothing else.
-          # 80 is the dashboard, 443 is vault.cunny.fr: caddy terminates TLS
-          # with a Let's Encrypt certificate it fetches itself.
           networking.firewall.allowedTCPPorts = [
             80
             443
@@ -144,8 +130,6 @@
             enable = true;
             openFirewall = false;
 
-            # info.lan resolves to this container through blocky. Only that host
-            # is served; anything else on port 80 gets caddy's own 404.
             configFile = pkgs.writeText "Caddyfile" ''
               http://info.lan {
                 header Content-Type "text/html; charset=utf-8"
@@ -154,28 +138,14 @@
               HTMLDASH 200
               }
 
-              # The public entry point. Caddy fetches its own certificate over
-              # ACME, so both 80 and 443 have to reach this container from the
-              # internet (see networking.nat.forwardPorts below). The websocket
-              # notification hub is proxied transparently.
               vault.cunny.fr {
                 reverse_proxy 192.168.244.120:8000
-              }
-
-              # Home Assistant sits on the wifi bridge next to the bulbs;
-              # phones reach it through here as hass.lan. Websockets for
-              # the frontend are proxied transparently.
-              http://hass.lan {
-                reverse_proxy 192.168.100.110:8123
               }
             '';
           };
         };
     };
 
-    # Public traffic arrives on the WAN port and has to be handed to the caddy
-    # container. forwardPorts is a list option, so this concatenates with the
-    # minecraft entry feature-lan-miyu owns rather than replacing it.
     networking.nat.forwardPorts = [
       {
         sourcePort = 80;
