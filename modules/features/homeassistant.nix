@@ -23,6 +23,10 @@
         networking.nameservers = [ "192.168.200.100" ];
 
         networking.firewall.allowedTCPPorts = [ 8123 ];
+        networking.firewall.allowedUDPPorts = [
+          5353
+          67
+        ];
 
         systemd.tmpfiles.rules = [ "d /var/lib/hass 0750 hass hass -" ];
 
