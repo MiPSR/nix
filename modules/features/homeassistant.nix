@@ -37,6 +37,7 @@
             "tplink"
             "mobile_app"
             "zeroconf"
+            "dhcp"
           ];
 
           config = {
@@ -48,6 +49,7 @@
             config = { };
             mobile_app = { };
             zeroconf = { };
+            dhcp = { };
           };
         };
       };
