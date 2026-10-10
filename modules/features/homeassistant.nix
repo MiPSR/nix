@@ -51,6 +51,13 @@
             };
             frontend = { };
             config = { };
+
+            # Caddy is the only proxy in front of this instance; without
+            # this HA answers every forwarded request with 400 Bad Request.
+            http = {
+              use_x_forwarded_for = true;
+              trusted_proxies = [ "192.168.244.101" ];
+            };
           };
         };
       };
