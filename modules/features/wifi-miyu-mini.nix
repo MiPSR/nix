@@ -200,6 +200,11 @@
 
       ip saddr 192.168.100.0/24 ip daddr 192.168.200.100 tcp dport 4000 accept
       ip saddr 192.168.100.0/24 ip daddr 192.168.244.100 tcp dport 4000 accept
+
+      # wivrn
+      ip saddr 192.168.100.0/24 ip daddr 192.168.144.0/24 udp dport 5353 accept
+      ip saddr 192.168.144.0/24 ip daddr 192.168.100.0/24 udp dport 5353 accept
+      ip saddr 192.168.100.0/24 ip daddr 192.168.144.0/24 tcp dport 9757 accept
     '';
 
     networking.nftables.tables.wifi-miyu-containment = {
@@ -207,6 +212,9 @@
       content = ''
         chain forward {
           type filter hook forward priority -10; policy accept;
+
+          # wivrn
+          ip saddr 192.168.100.0/24 ip daddr 192.168.144.0/24 tcp dport 9757 accept
 
           ip saddr 192.168.100.0/24 ip daddr {
             10.0.0.0/8,
