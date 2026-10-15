@@ -26,14 +26,11 @@ machine recipe based on the **hostname**.
 
 ## Shell aliases
 
-Defined for the **Nushell** shell.
-
-### SCRCPY
-* `phn`: launches **SCRCPY** with my personal settings.
+Defined for the **bruSH** shell, system-wide in `/etc/static/brushrc`
+(`modules/features/brush.nix`).
 
 ### Desktop maintenance
 * `fix-audio`: restarts PipeWire and PipeWire PulseAudio.
-* `restart-sunshine`: kills and restarts Sunshine.
 
 ### NixOS management
 * `nf`: updates the flake lock from `~/code/nix`.
@@ -44,10 +41,10 @@ Defined for the **Nushell** shell.
 
 ### Laziness
 * `ff`: `fastfetch`.
+* `l`: list files.
 * `la`: list all files (`ls -a`).
 * `ll`: list files in long format (`ls -l`).
 * `lla`: list all files in long format (`ls -la`).
-* `overdo`: `sudo`.
 
 ## Container Bind Mounts
 

@@ -4,7 +4,6 @@
       gamescope
       heroic
       interlude
-      osu-lazer-bin
       prismlauncher
       protonup-rs
       steam

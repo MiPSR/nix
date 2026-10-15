@@ -1,32 +1,36 @@
 { ... }: {
-  flake.nixosModules.feature-wifi-miyu-mini = { lib, pkgs, ... }: {
-    networking.networkmanager.ensureProfiles.profiles.miyu-ap = {
-      connection = {
-        id = "miyu-ap";
-        uuid = "1a2b3c4d-0000-4000-8000-000000000012";
-        type = "wifi";
-        interface-name = "wlp0s20f0u6";
-        master = "1a2b3c4d-0000-4000-8000-000000000002";
-        autoconnect = true;
+  flake.nixosModules.feature-wifi-miyu-mini = { pkgs, ... }: {
+    networking.networkmanager.ensureProfiles = {
+      environmentFiles = [ "/var/secrets/wifi-miyu.env" ];
+
+      profiles.miyu-ap = {
+        connection = {
+          id = "miyu-ap";
+          uuid = "1a2b3c4d-0000-4000-8000-000000000012";
+          type = "wifi";
+          interface-name = "wlp0s20f0u6";
+          master = "1a2b3c4d-0000-4000-8000-000000000002";
+          autoconnect = true;
+        };
+        bridge-port = {
+          path-cost = 100;
+        };
+        wifi = {
+          mode = "ap";
+          ssid = "미유";
+          band = "bg";
+          channel = 6;
+        };
+        wifi-security = {
+          key-mgmt = "sae";
+          psk = "$MIYU_PSK";
+          proto = "rsn;";
+          pairwise = "ccmp;";
+          group = "ccmp;";
+        };
+        ipv4.method = "disabled";
+        ipv6.method = "disabled";
       };
-      bridge-port = {
-        path-cost = 100;
-      };
-      wifi = {
-        mode = "ap";
-        ssid = "미유";
-        band = "bg";
-        channel = 6;
-      };
-      wifi-security = {
-        key-mgmt = "sae";
-        psk = lib.strings.removeSuffix "\n" (builtins.readFile ../../secrets/wifi-miyu-psk);
-        proto = "rsn;";
-        pairwise = "ccmp;";
-        group = "ccmp;";
-      };
-      ipv4.method = "disabled";
-      ipv6.method = "disabled";
     };
 
     containers.wifi-kea = {

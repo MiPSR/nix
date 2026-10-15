@@ -45,6 +45,7 @@
       git
       nixfmt
       p7zip
+      tmux
     ];
 
     hardware.enableRedistributableFirmware = true;
