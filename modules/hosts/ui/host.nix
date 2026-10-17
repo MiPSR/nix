@@ -17,8 +17,8 @@
               192000
               44100
             ];
-            "default.clock.min-quantum" = 256;
-            "default.clock.quantum" = 256;
+            "default.clock.min-quantum" = 512;
+            "default.clock.quantum" = 512;
             "default.clock.rate" = 192000;
           };
         };

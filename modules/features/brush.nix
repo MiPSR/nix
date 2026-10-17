@@ -28,19 +28,19 @@
           systemctl --user restart pipewire pipewire-pulse
         }
 
-        cln() {
+        cln() (
           sudo nix-collect-garbage -d
           sudo nix-store --optimise
-        }
+        )
 
         __flake() {
           printf '/home/%s/code/nix' "''${SUDO_USER:-$(id -un)}"
         }
 
-        nb() { sudo nixos-rebuild boot --flake "$(__flake)"; }
-        nf() { sudo nix flake update "$(__flake)"; }
-        ns() { sudo nixos-rebuild switch --flake "$(__flake)"; }
-        nt() { sudo nixos-rebuild test --flake "$(__flake)"; }
+        nb() ( sudo nixos-rebuild boot   --flake "$(__flake)" )
+        nf() ( cd "$(__flake)" && nix flake update )
+        ns() ( sudo nixos-rebuild switch --flake "$(__flake)" )
+        nt() ( sudo nixos-rebuild test   --flake "$(__flake)" )
 
         if [ -n "$PS1" ] && command -v starship >/dev/null 2>&1; then
           eval "$(starship init bash)"
