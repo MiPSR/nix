@@ -99,6 +99,7 @@
         mainProgram = "roxysu";
       };
     };
+
   in {
     programs.nix-ld = {
       enable = true;
@@ -109,6 +110,7 @@
     };
 
     environment.systemPackages = [
+      pkgs.gamescope
       pkgs.osu-lazer-bin
       roxysu
     ];

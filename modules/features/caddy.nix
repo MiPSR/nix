@@ -83,7 +83,7 @@
                   <dt>Gateway</dt><dd><code>192.168.100.254</code></dd>
                   <dt>DHCP server</dt><dd><code>192.168.100.100</code></dd>
                   <dt>Pool</dt><dd><code>192.168.100.1 - 192.168.100.99</code></dd>
-                  <dt>DNS</dt><dd><code>192.168.200.100</code> (blocky, Cloudflare DoT/DoH)</dd>
+                  <dt>DNS</dt><dd><code>192.168.244.100</code> (blocky, dns.sb DoT/DoH)</dd>
                   <dt>Radio</dt><dd><code>wlp0s20f0u6</code>, 2.4 GHz, channel 6</dd>
                   <dt>Security</dt><dd>WPA3-Personal (SAE), CCMP, PMF required</dd>
                 </dl>
@@ -102,10 +102,10 @@
                 </dl>
               </section>
 
-              <footer>WiFi clients reach the internet, this page and their own
-              resolver on <code>192.168.200.100</code>. They cannot reach the
-              LAN; on the services network only this page and the blocky API
-              are open to them.</footer>
+              <footer>WiFi clients reach the internet, this page and the
+              common resolver on <code>192.168.244.100</code>. They cannot reach
+              the LAN; on the services network only this page and the blocky
+              API are open to them.</footer>
             </div>
             </body>
             </html>

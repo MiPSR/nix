@@ -101,8 +101,7 @@
 
         networking.defaultGateway = "192.168.244.254";
         networking.nameservers = [
-          "9.9.9.9"
-          "149.112.112.112"
+          "192.168.244.100"
         ];
 
         networking.firewall.allowedTCPPorts = [
@@ -120,15 +119,15 @@
 
             upstreams = {
               groups.default = [
-                "tcp-tls:dns.quad9.net"
-                "https://dns.quad9.net/dns-query"
+                "https://doh.dns.sb/dns-query"
+                "tcp-tls:dot.dns.sb"
               ];
               strategy = "parallel_best";
             };
 
             bootstrapDns = [
-              "tcp+udp:9.9.9.9"
-              "tcp+udp:149.112.112.112"
+              "tcp+udp:185.222.222.222"
+              "tcp+udp:45.11.45.11"
             ];
 
             blocking = {

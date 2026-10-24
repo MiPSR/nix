@@ -18,16 +18,19 @@ Nix **Flakes** manage the configurations, automatically selecting the correct
 machine recipe based on the **hostname**.
 
 ## Shared across machines
-- **GDM**.
-- **Linux Zen** kernel.
-- **Niri** with **Wayle**, installed system-wide with a default configuration.
-- Dark theming from a custom **OKLCH palette** (`modules/palette.nix`).
+- **Noctalia** family on the PCs: **Umbriel** compositor, **Noctalia** shell and
+  **noctalia-greeter** (`modules/features/umbriel.nix`). X11 is disabled.
+- **fish** as interactive shell, configured system-wide via `programs.fish`
+  (`modules/features/fish.nix`).
+- **Steam** with an optional **GameScope** session on the gaming PCs
+  (`modules/features/steam.nix`).
+- **Linux Zen** kernel on the PCs, latest on the servers.
 - Locale is set to `en_US.UTF-8`, with regional settings in `fr_FR`.
 
 ## Shell aliases
 
-Defined for the **bruSH** shell, system-wide in `/etc/static/brushrc`
-(`modules/features/brush.nix`).
+Defined system-wide for **fish** via `programs.fish`
+(`modules/features/fish.nix`).
 
 ### Desktop maintenance
 * `fix-audio`: restarts PipeWire and PipeWire PulseAudio.

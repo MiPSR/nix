@@ -48,8 +48,7 @@
 
         networking.defaultGateway = "192.168.100.254";
         networking.nameservers = [
-          "1.1.1.1"
-          "1.0.0.1"
+          "192.168.244.100"
         ];
 
         networking.firewall.allowedUDPPorts = [ 67 ];
@@ -83,7 +82,7 @@
                   }
                   {
                     name = "domain-name-servers";
-                    data = "192.168.200.100";
+                    data = "192.168.244.100";
                   }
                   {
                     name = "domain-name";
@@ -105,85 +104,6 @@
       };
     };
 
-    containers.blocky-wifi = {
-      autoStart = true;
-      restartIfChanged = true;
-      privateNetwork = true;
-      hostBridge = "bridge_wifi_200";
-      localAddress = "192.168.200.100/24";
-
-      config = { ... }: {
-        system.stateVersion = "26.05";
-
-        networking.enableIPv6 = false;
-
-        nix.enable = false;
-
-        networking.defaultGateway = "192.168.200.254";
-        networking.nameservers = [
-          "1.1.1.1"
-          "1.0.0.1"
-        ];
-
-        networking.firewall.allowedTCPPorts = [
-          53
-          4000
-        ];
-        networking.firewall.allowedUDPPorts = [ 53 ];
-
-        services.blocky = {
-          enable = true;
-
-          settings = {
-            ports.dns = "192.168.200.100:53";
-            ports.http = "192.168.200.100:4000";
-
-            upstreams = {
-              groups.default = [
-                "tcp-tls:cloudflare-dns.com"
-                "https://cloudflare-dns.com/dns-query"
-              ];
-              strategy = "parallel_best";
-            };
-
-            bootstrapDns = [
-              "tcp+udp:1.1.1.1"
-              "tcp+udp:1.0.0.1"
-            ];
-
-            blocking = {
-              denylists.blocklistproject = [
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/ads.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/abuse.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/adobe.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/basic.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/crypto.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/drugs.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/facebook.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/fortnite.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/fraud.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/gambling.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/malware.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/phishing.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/piracy.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/porn.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/ransomware.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/redirect.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/scam.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/smart-tv.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/urlshortener.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/youtube.txt"
-              ];
-
-              clientGroupsBlock.default = [ "blocklistproject" ];
-
-              loading.refreshPeriod = "24h";
-            };
-          };
-        };
-      };
-    };
-
     networking.nat = {
       enable = true;
       internalIPs = [
@@ -199,10 +119,8 @@
     networking.firewall.extraForwardRules = ''
       ip saddr 192.168.100.0/24 ip daddr 192.168.244.101 tcp dport 80 accept
 
-      ip saddr 192.168.100.0/24 ip daddr 192.168.200.100 udp dport 53 accept
-      ip saddr 192.168.100.0/24 ip daddr 192.168.200.100 tcp dport 53 accept
-
-      ip saddr 192.168.100.0/24 ip daddr 192.168.200.100 tcp dport 4000 accept
+      ip saddr 192.168.100.0/24 ip daddr 192.168.244.100 udp dport 53 accept
+      ip saddr 192.168.100.0/24 ip daddr 192.168.244.100 tcp dport 53 accept
       ip saddr 192.168.100.0/24 ip daddr 192.168.244.100 tcp dport 4000 accept
 
       # wivrn
@@ -248,13 +166,6 @@
         RemainAfterExit = true;
         ExecStart = "-${pkgs.iw}/bin/iw dev wlp0s20f0u6 set 4addr on";
       };
-    };
-
-    systemd.services."container@blocky-wifi" = {
-      after = [ "NetworkManager-ensure-profiles.service" ];
-      wants = [ "NetworkManager-ensure-profiles.service" ];
-      startLimitBurst = 3;
-      startLimitIntervalSec = 60;
     };
 
     systemd.services."container@wifi-kea" = {

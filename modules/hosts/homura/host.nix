@@ -91,8 +91,7 @@
         services.dnsmasq.enable = false;
 
         networking.nameservers = [
-          "9.9.9.9"
-          "149.112.112.112"
+          "192.168.244.100"
         ];
 
         services.openssh = {

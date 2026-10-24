@@ -6,6 +6,7 @@
       self.nixosModules.feature-games
       self.nixosModules.feature-osu
       self.nixosModules.feature-retro
+      self.nixosModules.feature-steam
       self.nixosModules.feature-vr
       self.nixosModules.host-ui-hardware
       self.nixosModules.profile-pc

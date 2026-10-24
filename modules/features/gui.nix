@@ -4,9 +4,13 @@
       alsa-utils
       darktable
       (discord.override { withVencord = true; })
+      fooyin
+      google-chrome
+      helix
       jdk
       krita
       librewolf
+      opencode
       qtscrcpy
       stoat-desktop
     ];
@@ -47,14 +51,14 @@
 
     hardware.opentabletdriver.enable = true;
 
-    i18n.inputMethod = {
-      enable = true;
-      fcitx5 = {
-        addons = with pkgs; [ fcitx5-mozc ];
-        waylandFrontend = true;
-      };
-      type = "fcitx5";
-    };
+    #i18n.inputMethod = {
+    #  enable = true;
+    #  fcitx5 = {
+    #    addons = with pkgs; [ fcitx5-mozc ];
+    #    waylandFrontend = true;
+    #  };
+    #  type = "fcitx5";
+    #};
 
     security.rtkit.enable = true;
 

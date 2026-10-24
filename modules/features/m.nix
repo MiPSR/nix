@@ -1,6 +1,6 @@
 { self, ... }: {
   flake.nixosModules.feature-user-m = { pkgs, ... }: {
-    imports = [ self.nixosModules.feature-brush ];
+    imports = [ self.nixosModules.feature-fish ];
 
     users.users.m = {
       description = "Kévin";
@@ -10,7 +10,7 @@
       ];
       home = "/home/m";
       isNormalUser = true;
-      shell = pkgs.brush;
+      shell = pkgs.fish;
     };
   };
 }
