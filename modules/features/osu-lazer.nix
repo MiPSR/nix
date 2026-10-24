@@ -1,5 +1,5 @@
 { ... }: {
-  flake.nixosModules.feature-osu = { pkgs, lib, ... }: let
+  flake.nixosModules.feature-osu-lazer = { pkgs, lib, ... }: let
     tosuVersion = "4.26.2";
     roxysuVersion = "0.1.18";
 
@@ -100,6 +100,20 @@
       };
     };
 
+  lazerFixed = pkgs.writeShellScriptBin "lazer!fixed" ''
+    exec ${pkgs.gamescope}/bin/gamescope -w 1600 -h 900 -r 240 -f -- "osu!" "$@"
+  '';
+
+  lazerFixedDesktop = pkgs.makeDesktopItem {
+    name = "lazer!fixed";
+    desktopName = "lazer!fixed";
+    exec = "lazer!fixed";
+    icon = "osu";
+    categories = [ "Game" ];
+    terminal = false;
+    startupNotify = true;
+  };
+
   in {
     programs.nix-ld = {
       enable = true;
@@ -113,6 +127,8 @@
       pkgs.gamescope
       pkgs.osu-lazer-bin
       roxysu
+      lazerFixed
+      lazerFixedDesktop
     ];
 
     security.wrappers.tosu = {

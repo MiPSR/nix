@@ -4,7 +4,7 @@
       { networking.hostName = "roxy"; system.stateVersion = "26.05"; }
       self.nixosModules.feature-amdgpu
       self.nixosModules.feature-games
-      self.nixosModules.feature-osu
+      self.nixosModules.feature-osu-lazer
       self.nixosModules.feature-steam
       self.nixosModules.feature-vr
       self.nixosModules.host-roxy-hardware

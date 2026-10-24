@@ -9,15 +9,26 @@
               "sh -c \"grep -qai panasonic /sys/class/drm/*/edid && wl-gammactl -g 1.6\""
             ];
 
-            input.keyboard = {
-              layout = "us";
-              variant = "intl";
+            environment = {
+              XCURSOR_SIZE = "24";
+              XCURSOR_THEME = "Bibata-Modern-Ice";
+            };
+
+            input = {
+              cursor = {
+                size = 24;
+                theme = "Bibata-Modern-Ice";
+              };
+              keyboard = {
+                layout = "us";
+                variant = "intl";
+              };
             };
 
             keybinds = {
-              "Alt+Print" = "spawn:noctalia msg screenshot-window --copy-to-clipboard --no-save-to-file";
+              "Alt+Print" = ''spawn:sh -c 'geom=$(umbriel windows | grep "^*" | head -n1 | grep -oE "[0-9]+x[0-9]+[+-][0-9]+[+-][0-9]+" | head -n1); region=$(printf "%s" "$geom" | sed -E "s/^([0-9]+)x([0-9]+)([+-][0-9]+)([+-][0-9]+)$/\3,\4 \1x\2/" | tr -d "+"); [ -n "$region" ] && grim -g "$region" - | wl-copy --type image/png && notify-send "Screenshot" "Window copied to clipboard"' '';
               "Ctrl+Alt+Delete" = "session-quit:skip-confirmation";
-              "Ctrl+Print" = "spawn:noctalia msg screenshot-region --copy-to-clipboard --no-save-to-file";
+              "Ctrl+Print" = ''spawn:sh -c 'geom=$(slurp); [ -n "$geom" ] && grim -g "$geom" - | wl-copy --type image/png && notify-send "Screenshot" "Region copied to clipboard"' '';
               "Mod+Shift+F" = "spawn:dolphin";
               "Mod+J" = "window-cycle-primary-extent";
               "Mod+L" = "spawn:noctalia msg panel-toggle session";
@@ -29,7 +40,7 @@
               "Mod+V" = "window-toggle-floating";
               "Mod+WheelDown" = "window-focus-right";
               "Mod+WheelUp" = "window-focus-left";
-              "Print" = "spawn:noctalia msg screenshot-fullscreen --copy-to-clipboard --no-save-to-file";
+              "Print" = ''spawn:sh -c 'out=$(umbriel outputs | awk "/^[A-Za-z0-9-]+ /{o=\$1} /Focused: yes/{print o; exit}"); [ -n "$out" ] && grim -o "$out" - | wl-copy --type image/png && notify-send "Screenshot" "Screen copied to clipboard"' '';
               "XF86AudioLowerVolume" = {
                 action = "spawn:noctalia msg volume-down";
                 allow_when_locked = true;
@@ -54,7 +65,9 @@
 
       systemPackages = with pkgs; [
         alacritty
+        bibata-cursors
         brightnessctl
+        libnotify
         kdePackages.ark
         kdePackages.breeze
         kdePackages.dolphin
@@ -66,7 +79,10 @@
         kdePackages.kdialog
         kdePackages.okular
         kdePackages.xdg-desktop-portal-kde
+        grim
         noctalia
+        slurp
+        wl-clipboard
         wl-gammactl
       ];
     };
