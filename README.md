@@ -56,3 +56,8 @@ Defined system-wide for **fish** via `programs.fish`
 | vaultwarden | /var/lib/vaultwarden | /var/lib/vaultwarden | false |
 | vaultwarden | /etc/vaultwarden/secrets.env | /run/secrets/vaultwarden.env | true |
 | minecraft | /var/lib/minecraft | /var/lib/minecraft | false |
+| wireguard | /var/lib/wireguard | /var/lib/wireguard | false |
+
+## WireGuard
+
+Generate a client QR code: `qrencode -t ansiutf8 < client.conf`

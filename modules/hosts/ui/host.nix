@@ -11,20 +11,6 @@
       self.nixosModules.feature-vr
       self.nixosModules.host-ui-hardware
       self.nixosModules.profile-pc
-      ({ ... }: {
-        services.pipewire.extraConfig.pipewire."50-clock" = {
-          "context.properties" = {
-            "clock.power-of-two-quantum" = false;
-            "default.clock.allowed-rates" = [
-              192000
-              44100
-            ];
-            "default.clock.min-quantum" = 512;
-            "default.clock.quantum" = 512;
-            "default.clock.rate" = 192000;
-          };
-        };
-      })
     ];
   };
 }

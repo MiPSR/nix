@@ -3,11 +3,6 @@
     boot = {
       consoleLogLevel = 3;
 
-      initrd = {
-        systemd.enable = true;
-        verbose = false;
-      };
-
       kernel.sysctl."vm.swappiness" = 190;
 
       kernelParams = [

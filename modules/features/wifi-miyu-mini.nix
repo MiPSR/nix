@@ -108,11 +108,9 @@
       enable = true;
       internalIPs = [
         "192.168.100.0/24"
-        "192.168.200.0/24"
       ];
       internalInterfaces = [
         "bridge_wifi_100"
-        "bridge_wifi_200"
       ];
     };
 
@@ -150,9 +148,6 @@
     networking.firewall.extraInputRules = ''
       iifname "bridge_wifi_100" ct state established,related accept
       iifname "bridge_wifi_100" counter drop comment "no host access from wifi"
-
-      iifname "bridge_wifi_200" ct state established,related accept
-      iifname "bridge_wifi_200" counter drop comment "no host access from wifi dns"
     '';
 
     systemd.services.wifi-bridge-four-address = {

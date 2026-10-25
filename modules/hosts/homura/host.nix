@@ -38,22 +38,6 @@
             ipv6.method = "disabled";
           };
 
-          bridge_wifi_200 = {
-            connection = {
-              id = "bridge_wifi_200";
-              uuid = "1a2b3c4d-0000-4000-8000-000000000005";
-              type = "bridge";
-              interface-name = "bridge_wifi_200";
-              autoconnect = true;
-            };
-            bridge.stp = false;
-            ipv4 = {
-              method = "manual";
-              addresses = "192.168.200.254/24";
-            };
-            ipv6.method = "disabled";
-          };
-
           bridge_services = {
             connection = {
               id = "bridge_services";
@@ -106,6 +90,7 @@
       self.nixosModules.feature-minecraft-server
       self.nixosModules.feature-vaultwarden
       self.nixosModules.feature-wifi-miyu-mini
+      self.nixosModules.feature-wireguard
     ];
   };
 }

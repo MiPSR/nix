@@ -9,6 +9,13 @@
               "sh -c \"grep -qai panasonic /sys/class/drm/*/edid && wl-gammactl -g 1.6\""
             ];
 
+            output = {
+              "Panasonic Industry Company Panasonic-TV 0x01010101" = {
+                mode = "1920x1080@60";
+                scale = 1.0;
+              };
+            };
+
             environment = {
               XCURSOR_SIZE = "24";
               XCURSOR_THEME = "Bibata-Modern-Ice";
@@ -23,6 +30,7 @@
                 layout = "us";
                 variant = "intl";
               };
+              touchpad.tap = false;
             };
 
             keybinds = {

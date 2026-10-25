@@ -1,4 +1,4 @@
-{ ... }: {
+{ inputs, ... }: {
   flake.nixosModules.feature-gui = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       alsa-utils
@@ -13,6 +13,7 @@
       opencode
       qtscrcpy
       stoat-desktop
+      inputs.super-simple-defaults.packages.x86_64-linux.default
     ];
 
     fonts = {
@@ -69,6 +70,18 @@
           support32Bit = true;
         };
         enable = true;
+        extraConfig.pipewire."50-clock" = {
+          "context.properties" = {
+            "clock.power-of-two-quantum" = false;
+            "default.clock.allowed-rates" = [
+              192000
+              44100
+            ];
+            "default.clock.min-quantum" = 512;
+            "default.clock.quantum" = 512;
+            "default.clock.rate" = 192000;
+          };
+        };
         jack.enable = true;
         pulse.enable = true;
       };
