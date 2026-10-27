@@ -12,25 +12,30 @@
       boot = {
         initrd.availableKernelModules = [
           "nvme"
+          "sd_mod"
+          "usb_storage"
           "usbhid"
           "xhci_pci"
           "xhci_pci_renesas"
         ];
 
-        initrd.luks.devices."luks-2e218e38-04d8-478c-8aac-567a0efb5934".device =
-          "/dev/disk/by-uuid/2e218e38-04d8-478c-8aac-567a0efb5934";
+        initrd.luks.devices."master" = {
+          device = "/dev/disk/by-uuid/3a5435a5-e772-40d3-ae57-a9cf4dc0fe15";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
 
         kernelModules = [ "kvm-amd" ];
       };
 
       fileSystems = {
         "/" = {
-          device = "/dev/mapper/luks-2e218e38-04d8-478c-8aac-567a0efb5934";
-          fsType = "ext4";
+          device = "/dev/mapper/master";
+          fsType = "f2fs";
         };
 
         "/boot" = {
-          device = "/dev/disk/by-uuid/C602-7642";
+          device = "/dev/disk/by-uuid/1291-368A";
           fsType = "vfat";
           options = [
             "dmask=0077"

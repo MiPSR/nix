@@ -52,14 +52,19 @@
 
     hardware.opentabletdriver.enable = true;
 
-    #i18n.inputMethod = {
-    #  enable = true;
-    #  fcitx5 = {
-    #    addons = with pkgs; [ fcitx5-mozc ];
-    #    waylandFrontend = true;
-    #  };
-    #  type = "fcitx5";
-    #};
+    i18n.inputMethod = {
+      enable = true;
+      fcitx5 = {
+        addons = with pkgs; [ fcitx5-mozc ];
+        waylandFrontend = true;
+      };
+      type = "fcitx5";
+    };
+
+    programs.kde-pim = {
+      enable = true;
+      kmail = true;
+    };
 
     security.rtkit.enable = true;
 

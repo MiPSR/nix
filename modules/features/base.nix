@@ -3,7 +3,11 @@
     boot = {
       consoleLogLevel = 3;
 
-      kernel.sysctl."vm.swappiness" = 190;
+      kernel = {
+        sysctl = {
+          "vm.swappiness" = 190;
+        };
+      };
 
       kernelParams = [
         "boot.shell_on_fail"
