@@ -7,12 +7,15 @@
       fooyin
       google-chrome
       helix
+      heroic
       jdk
       krita
       librewolf
       opencode
+      prismlauncher
       qtscrcpy
       stoat-desktop
+      thunderbird-esr
       inputs.super-simple-defaults.packages.x86_64-linux.default
     ];
 
@@ -59,11 +62,6 @@
         waylandFrontend = true;
       };
       type = "fcitx5";
-    };
-
-    programs.kde-pim = {
-      enable = true;
-      kmail = true;
     };
 
     security.rtkit.enable = true;
