@@ -1,8 +1,11 @@
 { ... }: {
-  flake.nixosModules.feature-steam = {
+  flake.nixosModules.feature-steam = { pkgs, ... }: {
     programs.steam = {
       enable = true;
 
+      extraCompatPackages = with pkgs; [
+        proton-ge-bin
+      ];
       gamescopeSession.enable = true;
     };
   };
