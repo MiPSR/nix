@@ -132,13 +132,12 @@
 
             blocking = {
               denylists.blocklistproject = [
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/ads.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/abuse.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/adobe.txt"
+                "https://raw.githubusercontent.com/blocklistproject/Lists/main/ads.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/basic.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/crypto.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/drugs.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/facebook.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/fortnite.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/fraud.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/gambling.txt"
@@ -150,8 +149,9 @@
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/redirect.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/scam.txt"
                 "https://raw.githubusercontent.com/blocklistproject/Lists/main/smart-tv.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/urlshortener.txt"
-                "https://raw.githubusercontent.com/blocklistproject/Lists/main/youtube.txt"
+                "https://raw.githubusercontent.com/blocklistproject/Lists/main/tiktok.txt"
+                "https://raw.githubusercontent.com/blocklistproject/Lists/main/tracking.txt"
+                "https://raw.githubusercontent.com/blocklistproject/Lists/main/vaping.txt"
               ];
 
               allowlists.blocklistproject = [

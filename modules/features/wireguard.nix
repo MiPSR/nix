@@ -16,15 +16,11 @@
         isReadOnly = false;
       };
 
-      config = { pkgs, ... }: {
-        system.stateVersion = "26.05";
-
-        networking.enableIPv6 = false;
-
-        nix.enable = false;
+      config = { ... }: {
+        boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
         networking.defaultGateway = "192.168.244.254";
-        networking.nameservers = [ "192.168.244.100" ];
+        networking.enableIPv6 = false;
 
         networking.firewall = {
           allowedUDPPorts = [ 51820 ];
@@ -32,20 +28,23 @@
             iifname "wg0" accept
             oifname "wg0" ct state established,related accept
           '';
+          filterForward = true;
         };
+
+        networking.nameservers = [ "192.168.244.100" ];
+        networking.nftables.enable = true;
 
         networking.wireguard.interfaces.wg0 = {
+          generatePrivateKeyFile = true;
           ips = [ "192.168.67.254/24" ];
           listenPort = 51820;
-          privateKeyFile = "/var/lib/wireguard/private.key";
-          generatePrivateKeyFile = true;
-
-          postSetup = ''
-            ${pkgs.procps}/bin/sysctl -w net.ipv4.ip_forward=1
-          '';
-
           peers = [ ];
+          privateKeyFile = "/var/lib/wireguard/private.key";
         };
+
+        nix.enable = false;
+
+        system.stateVersion = "26.05";
       };
     };
 
