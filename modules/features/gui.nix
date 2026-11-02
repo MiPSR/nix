@@ -13,9 +13,12 @@
       librewolf
       opencode
       prismlauncher
+      pwvucontrol
       qtscrcpy
       stoat-desktop
       thunderbird-esr
+      vesktop
+      wlr-randr
       inputs.super-simple-defaults.packages.x86_64-linux.default
     ];
 
@@ -88,12 +91,22 @@
         jack.enable = true;
         pulse.enable = true;
       };
-      power-profiles-daemon.enable = true;
       printing.enable = true;
       udev.extraRules = ''
         KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", TAG+="uaccess"
       '';
       udisks2.enable = true;
+    };
+
+    systemd.services.power-profile-default = {
+      description = "Set the default power profile";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "power-profiles-daemon.service" ];
+      requires = [ "power-profiles-daemon.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.power-profiles-daemon}/bin/powerprofilesctl set power-saver";
+      };
     };
   };
 }

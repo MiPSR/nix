@@ -29,7 +29,10 @@
               layout = "us";
               variant = "intl";
             };
-            touchpad.tap = false;
+            touchpad = {
+              natural_scroll = true;
+              tap = false;
+            };
           };
 
           keybinds = {

@@ -81,6 +81,8 @@
       enableSSHSupport = true;
     };
 
+    services.power-profiles-daemon.enable = true;
+
     time.timeZone = "Europe/Paris";
 
     zramSwap = {

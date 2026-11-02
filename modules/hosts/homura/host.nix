@@ -83,6 +83,18 @@
           openFirewall = false;
         };
       })
+      ({ pkgs, ... }: {
+        systemd.services.power-profile-default = {
+          description = "Set the default power profile";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "power-profiles-daemon.service" ];
+          requires = [ "power-profiles-daemon.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.power-profiles-daemon}/bin/powerprofilesctl set balanced";
+          };
+        };
+      })
       self.nixosModules.host-homura-hardware
       self.nixosModules.profile-server
       self.nixosModules.feature-caddy
