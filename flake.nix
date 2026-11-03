@@ -8,6 +8,10 @@
     wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
     osu-stable-nixos.url = "github:MiPSR/osu-stable-nixos";
     super-simple-defaults.url = "github:MiPSR/super-simple-defaults";
+    roxysu = {
+      url = "github:Yon-Luc/Roxysu";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {
