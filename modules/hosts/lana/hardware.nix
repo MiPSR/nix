@@ -9,7 +9,7 @@
           "xhci_pci"
         ];
 
-        luks.devices."master".device = "/dev/disk/by-uuid/xxxx";
+        luks.devices."master".device = "/dev/disk/by-uuid/14b20177-3860-4988-b6a6-2cb995de5abf";
       };
 
       kernelModules = [ "kvm-amd" ];
@@ -18,21 +18,16 @@
     fileSystems = {
       "/" = {
         device = "/dev/mapper/master";
-        fsType = "ext4";
+        fsType = "f2fs";
       };
 
       "/boot" = {
-        device = "/dev/disk/by-uuid/xxxx";
+        device = "/dev/disk/by-uuid/8B83-666A";
         fsType = "vfat";
         options = [
           "dmask=0077"
           "fmask=0077"
         ];
-      };
-
-      "/mnt/slave" = {
-        device = "/dev/disk/by-uuid/xxxx";
-        fsType = "ext4";
       };
     };
 
