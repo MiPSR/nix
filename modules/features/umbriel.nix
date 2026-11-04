@@ -25,6 +25,12 @@
               size = 24;
               theme = "Bibata-Modern-Ice";
             };
+            device = [
+              {
+                name = "HT Nulea M509";
+                accel_profile = "custom 0.2 0.0 0.05 0.12 0.25 0.55 1.0 1.8 2.8";
+              }
+            ];
             keyboard = {
               layout = "us";
               variant = "intl";

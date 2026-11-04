@@ -58,6 +58,8 @@
 
     hardware.opentabletdriver.enable = true;
 
+    services.lact.enable = true;
+
     i18n.inputMethod = {
       enable = true;
       fcitx5 = {

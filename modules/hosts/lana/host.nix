@@ -5,6 +5,7 @@
       self.nixosModules.feature-amdgpu
       self.nixosModules.feature-osu-lazer
       self.nixosModules.feature-osu-stable
+      self.nixosModules.feature-steam
       self.nixosModules.feature-vr
       self.nixosModules.host-lana-hardware
       self.nixosModules.profile-pc
