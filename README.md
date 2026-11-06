@@ -125,7 +125,7 @@ Build or switch to a machine configuration with its hostname as the flake
 target, for example:
 
 ```sh
-sudo nixos-rebuild switch --flake .#roxy
+nixos-rebuild switch --flake .#roxy --sudo
 ```
 
 Replace `roxy` with `lana`, `ui` or `homura` for the other machines. The
