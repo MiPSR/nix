@@ -43,6 +43,7 @@ Defined system-wide for **fish** via `programs.fish`
 * `cln`: cleans the system by removing old generations and optimising the Nix store.
 
 ### Laziness
+* `ai`: switches to the `kzk` user (login shell, home `/home/kzk`).
 * `ff`: `fastfetch`.
 * `l`: list files.
 * `la`: list all files (`ls -a`).
@@ -146,6 +147,7 @@ Defined system-wide for **fish** via `programs.fish`
 * `cln`: cleans the system by removing old generations and optimising the Nix store.
 
 ### Laziness
+* `ai`: switches to the `kzk` user (login shell, home `/home/kzk`).
 * `ff`: `fastfetch`.
 * `l`: list files.
 * `la`: list all files (`ls -a`).

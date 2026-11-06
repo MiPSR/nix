@@ -57,6 +57,7 @@
       '';
 
       shellAliases = {
+        ai = "sudo -iu kzk";
         cln = "sudo nix-collect-garbage -d && sudo nix-store --optimise";
         ff = "fastfetch";
         fix-audio = "systemctl --user restart pipewire pipewire-pulse";

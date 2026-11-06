@@ -45,13 +45,14 @@
             "Alt+Print" =
               ''spawn:sh -c 'geom=$(umbriel windows | grep "^*" | head -n1 | grep -oE "[0-9]+x[0-9]+[+-][0-9]+[+-][0-9]+" | head -n1); region=$(printf "%s" "$geom" | sed -E "s/^([0-9]+)x([0-9]+)([+-][0-9]+)([+-][0-9]+)$/\3,\4 \1x\2/" | tr -d "+"); [ -n "$region" ] && grim -g "$region" - | wl-copy --type image/png && notify-send "Screenshot" "Window copied to clipboard"' '';
             "Ctrl+Alt+Delete" = "session-quit:skip-confirmation";
-            "Mod+Shift+F" = "spawn:dolphin";
+            "Ctrl+Print" = "spawn:noctalia msg screenshot-region";
             "Mod+J" = "window-cycle-primary-extent";
             "Mod+L" = "spawn:noctalia msg panel-toggle session";
             "Mod+Left" = "window-focus-left";
             "Mod+Return" = "spawn:alacritty";
             "Mod+Right" = "window-focus-right";
             "Mod+Shift+C" = "window-close";
+            "Mod+Shift+F" = "spawn:dolphin";
             "Mod+Space" = "spawn:noctalia msg panel-toggle launcher";
             "Mod+V" = "window-toggle-floating";
             "Mod+WheelDown" = "window-focus-right";
