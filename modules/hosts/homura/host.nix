@@ -95,6 +95,7 @@
       self.nixosModules.feature-caddy
       self.nixosModules.feature-lan-miyu
       self.nixosModules.feature-minecraft-server
+      self.nixosModules.feature-super-simple-booru-bot
       self.nixosModules.feature-vaultwarden
       self.nixosModules.feature-wifi-miyu-mini
       self.nixosModules.feature-wireguard
