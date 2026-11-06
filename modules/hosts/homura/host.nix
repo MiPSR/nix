@@ -77,11 +77,6 @@
         networking.nameservers = [
           "192.168.244.100"
         ];
-
-        services.openssh = {
-          enable = true;
-          openFirewall = false;
-        };
       })
       ({ pkgs, ... }: {
         systemd.services.power-profile-default = {

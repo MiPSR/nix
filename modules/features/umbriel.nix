@@ -28,7 +28,7 @@
             device = [
               {
                 name = "HT Nulea M509";
-                accel_profile = "custom 0.2 0.0 0.05 0.12 0.25 0.55 1.0 1.8 2.8";
+                accel_profile = "custom 0.1 0.00000 0.10000 0.20000 0.30000 0.40000 0.50000 0.61833 0.76749 0.94025 1.13109 1.33577 1.55107 1.77448 2.00412 2.23853 2.47658 2.71744 2.96043 3.20506 3.45095 3.69780 3.94539 4.19354 4.44213 4.69105 4.94022 5.18958 5.43909 5.68872 5.93843 6.18822 6.43805 6.68792 6.93782 7.18775 7.43769 7.68764 7.93761 8.18758 8.43756 8.68755";
               }
             ];
             keyboard = {
@@ -45,8 +45,6 @@
             "Alt+Print" =
               ''spawn:sh -c 'geom=$(umbriel windows | grep "^*" | head -n1 | grep -oE "[0-9]+x[0-9]+[+-][0-9]+[+-][0-9]+" | head -n1); region=$(printf "%s" "$geom" | sed -E "s/^([0-9]+)x([0-9]+)([+-][0-9]+)([+-][0-9]+)$/\3,\4 \1x\2/" | tr -d "+"); [ -n "$region" ] && grim -g "$region" - | wl-copy --type image/png && notify-send "Screenshot" "Window copied to clipboard"' '';
             "Ctrl+Alt+Delete" = "session-quit:skip-confirmation";
-            "Ctrl+Print" =
-              ''spawn:sh -c 'geom=$(slurp); [ -n "$geom" ] && grim -g "$geom" - | wl-copy --type image/png && notify-send "Screenshot" "Region copied to clipboard"' '';
             "Mod+Shift+F" = "spawn:dolphin";
             "Mod+J" = "window-cycle-primary-extent";
             "Mod+L" = "spawn:noctalia msg panel-toggle session";

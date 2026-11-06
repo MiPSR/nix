@@ -98,6 +98,7 @@
         KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", TAG+="uaccess"
       '';
       udisks2.enable = true;
+      upower.enable = true;
     };
 
     systemd.services.power-profile-default = {

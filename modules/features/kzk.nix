@@ -1,5 +1,5 @@
 { self, ... }: {
-  flake.nixosModules.feature-user-kzk = { ... }: {
+  flake.nixosModules.feature-user-kzk = { pkgs, ... }: {
     users.groups.ai = { };
 
     users.users.kzk = {
@@ -8,6 +8,7 @@
       hashedPasswordFile = "/dev/null";
       home = "/home/kzk";
       isSystemUser = true;
+      shell = pkgs.bashInteractive;
     };
   };
 }

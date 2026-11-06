@@ -81,7 +81,18 @@
       enableSSHSupport = true;
     };
 
-    services.power-profiles-daemon.enable = true;
+    services = {
+      openssh = {
+        enable = true;
+        openFirewall = false;
+        settings.PasswordAuthentication = false;
+      };
+      power-profiles-daemon.enable = true;
+    };
+
+    users.users.m.openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfagSeD+SvqQwNtkM5+0yfAwF9hbI/N2ch8isiIaSch kotama@cunny.fr"
+    ];
 
     time.timeZone = "Europe/Paris";
 
