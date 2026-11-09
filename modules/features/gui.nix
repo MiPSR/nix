@@ -90,7 +90,6 @@
             "default.clock.rate" = 192000;
           };
         };
-        jack.enable = true;
         pulse.enable = true;
       };
       printing.enable = true;
