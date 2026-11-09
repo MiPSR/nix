@@ -43,38 +43,40 @@
 
           keybinds = {
             "Alt+Print" =
-              ''spawn:sh -c 'geom=$(umbriel windows | grep "^*" | head -n1 | grep -oE "[0-9]+x[0-9]+[+-][0-9]+[+-][0-9]+" | head -n1); region=$(printf "%s" "$geom" | sed -E "s/^([0-9]+)x([0-9]+)([+-][0-9]+)([+-][0-9]+)$/\3,\4 \1x\2/" | tr -d "+"); [ -n "$region" ] && grim -g "$region" - | wl-copy --type image/png && notify-send "Screenshot" "Window copied to clipboard"' '';
-            "Ctrl+Alt+Delete" = "session-quit:skip-confirmation";
-            "Ctrl+Print" = "spawn:noctalia msg screenshot-region";
+              ''spawn sh -c 'geom=$(umbriel windows | grep "^*" | head -n1 | grep -oE "[0-9]+x[0-9]+[+-][0-9]+[+-][0-9]+" | head -n1); region=$(printf "%s" "$geom" | sed -E "s/^([0-9]+)x([0-9]+)([+-][0-9]+)([+-][0-9]+)$/\3,\4 \1x\2/" | tr -d "+"); [ -n "$region" ] && grim -g "$region" - | wl-copy --type image/png && notify-send "Screenshot" "Window copied to clipboard"' '';
+            "Ctrl+Alt+Delete" = "session-quit skip-confirmation";
+            "Ctrl+Print" = "spawn noctalia msg screenshot-region";
             "Mod+J" = "window-cycle-primary-extent";
-            "Mod+L" = "spawn:noctalia msg panel-toggle session";
+            "Mod+L" = "spawn noctalia msg panel-toggle session";
             "Mod+Left" = "window-focus-left";
-            "Mod+Return" = "spawn:alacritty";
+            "Mod+Up" = "window-focus-or-workspace-up";
+            "Mod+Down" = "window-focus-or-workspace-down";
+            "Mod+Return" = "spawn alacritty";
             "Mod+Right" = "window-focus-right";
             "Mod+Shift+C" = "window-close";
-            "Mod+Shift+F" = "spawn:dolphin";
-            "Mod+Space" = "spawn:noctalia msg panel-toggle launcher";
+            "Mod+Shift+F" = "spawn dolphin";
+            "Mod+Space" = "spawn noctalia msg panel-toggle launcher";
             "Mod+V" = "window-toggle-floating";
             "Mod+WheelDown" = "window-focus-right";
             "Mod+WheelUp" = "window-focus-left";
             "Print" =
-              ''spawn:sh -c 'out=$(umbriel outputs | awk "/^[A-Za-z0-9-]+ /{o=\$1} /Focused: yes/{print o; exit}"); [ -n "$out" ] && grim -o "$out" - | wl-copy --type image/png && notify-send "Screenshot" "Screen copied to clipboard"' '';
+              ''spawn sh -c 'out=$(umbriel outputs | awk "/^[A-Za-z0-9-]+ /{o=\$1} /Focused: yes/{print o; exit}"); [ -n "$out" ] && grim -o "$out" - | wl-copy --type image/png && notify-send "Screenshot" "Screen copied to clipboard"' '';
             "XF86AudioLowerVolume" = {
-              action = "spawn:noctalia msg volume-down";
+              action = "spawn noctalia msg volume-down";
               allow_when_locked = true;
             };
-            "XF86AudioMicMute" = "spawn:wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+            "XF86AudioMicMute" = "spawn wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
             "XF86AudioMute" = {
-              action = "spawn:noctalia msg volume-mute";
+              action = "spawn noctalia msg volume-mute";
               allow_when_locked = true;
               repeat = false;
             };
             "XF86AudioRaiseVolume" = {
-              action = "spawn:noctalia msg volume-up";
+              action = "spawn noctalia msg volume-up";
               allow_when_locked = true;
             };
-            "XF86MonBrightnessDown" = "spawn:brightnessctl set 5%-";
-            "XF86MonBrightnessUp" = "spawn:brightnessctl set +5%";
+            "XF86MonBrightnessDown" = "spawn brightnessctl set 5%-";
+            "XF86MonBrightnessUp" = "spawn brightnessctl set +5%";
           };
 
         };
