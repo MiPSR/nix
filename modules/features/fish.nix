@@ -65,10 +65,10 @@
         la = "ls -a";
         ll = "ls -l";
         lla = "ls -la";
-        nb = "fish -c 'cd /home/m/code/nix && nixos-rebuild boot --flake --sudo --no-update-lock-file'";
+        nb = "fish -c 'cd /home/m/code/nix && nixos-rebuild boot --flake --sudo'";
         nf = "fish -c 'cd /home/m/code/nix && nix flake update'";
-        ns = "fish -c 'cd /home/m/code/nix && nixos-rebuild switch --flake --sudo --no-update-lock-file'";
-        nt = "fish -c 'cd /home/m/code/nix && nixos-rebuild test --flake --sudo --no-update-lock-file'";
+        ns = "fish -c 'cd /home/m/code/nix && nixos-rebuild switch --flake --sudo'";
+        nt = "fish -c 'cd /home/m/code/nix && nixos-rebuild test --flake --sudo'";
       };
     };
   };
