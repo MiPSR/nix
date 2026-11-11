@@ -9,23 +9,6 @@
           policy = [ "magic" ];
         };
         system.stateVersion = "26.05";
-
-
-
-        nixpkgs.overlays = [
-        (final: prev: {
-          opencode = prev.opencode.overrideAttrs (old: {
-            node_modules = old.node_modules.overrideAttrs (_: {
-              outputHash = "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA=";
-              });
-            });
-          })
-        ];
-
-
-
-
-
       }
       self.nixosModules.feature-amdgpu
       self.nixosModules.feature-laptop
