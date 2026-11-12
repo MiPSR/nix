@@ -59,6 +59,8 @@
             "Mod+V" = "window-toggle-floating";
             "Mod+WheelDown" = "window-focus-right";
             "Mod+WheelUp" = "window-focus-left";
+            "Mod+Shift+WheelDown" = "window-focus-or-workspace-down";
+            "Mod+Shift+WheelUp" = "window-focus-or-workspace-up";
             "Print" =
               ''spawn sh -c 'out=$(umbriel outputs | awk "/^[A-Za-z0-9-]+ /{o=\$1} /Focused: yes/{print o; exit}"); [ -n "$out" ] && grim -o "$out" - | wl-copy --type image/png && notify-send "Screenshot" "Screen copied to clipboard"' '';
             "XF86AudioLowerVolume" = {
