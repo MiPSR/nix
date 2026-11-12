@@ -11,13 +11,12 @@
 
     networking.firewall = {
       allowedTCPPorts = [ 9757 ];
-      allowedUDPPorts = [ 9757 ];
+      allowedUDPPorts = [ 5353 9757 ];
     };
 
     services.avahi = {
       enable = true;
       nssmdns4 = true;
-      openFirewall = true;
       settings.publish = {
         "disable-publishing" = false;
         "disable-user-service-publishing" = false;
