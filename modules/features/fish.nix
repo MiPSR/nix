@@ -67,6 +67,7 @@
         lla = "ls -la";
         nb = "fish -c 'cd /home/m/code/nix && nixos-rebuild boot --flake --sudo'";
         nf = "fish -c 'cd /home/m/code/nix && nix flake update'";
+        np = "fish -c 'cd /home/m/code/nix && git pull origin'";
         ns = "fish -c 'cd /home/m/code/nix && nixos-rebuild switch --flake --sudo'";
         nt = "fish -c 'cd /home/m/code/nix && nixos-rebuild test --flake --sudo'";
       };
