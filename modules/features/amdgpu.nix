@@ -6,11 +6,16 @@
 
     hardware = {
       alsa.enablePersistence = true;
-      amdgpu.opencl.enable = true;
+      amdgpu = {
+        opencl.enable = true;
+        overdrive.enable = true;
+      };
       graphics = {
         enable = true;
         enable32Bit = true;
       };
     };
+
+    services.lact.enable = true;
   };
 }
