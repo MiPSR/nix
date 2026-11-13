@@ -6,21 +6,29 @@
       alcom
       bs-manager
       wayvr
-      wivrn
     ];
 
-    networking.firewall = {
-      allowedTCPPorts = [ 9757 ];
-      allowedUDPPorts = [ 5353 9757 ];
-    };
-
-    services.avahi = {
+    # Ports and avahi publishing are opened/configured by the service itself
+    services.wivrn = {
       enable = true;
-      nssmdns4 = true;
-      settings.publish = {
-        "disable-publishing" = false;
-        "disable-user-service-publishing" = false;
-        "publish-addresses" = true;
+      openFirewall = true;
+
+      # CAP_SYS_NICE, for asynchronous reprojection
+      highPriority = true;
+
+      # Steam OpenXR discovery
+      steam.importOXRRuntimes = true;
+      steam.package = pkgs.steam;
+
+      config.enable = true;
+      config.json = {
+        application = [ pkgs.wayvr ];
+        encoder = {
+          codec = "h265";
+          encoder = "vaapi";
+        };
+        tcp-only = true;
+        # hostname unset: WiVRn defaults to the system hostname
       };
     };
   };

@@ -12,6 +12,7 @@
       krita
       librewolf
       opencode
+      opencode-desktop
       prismlauncher
       pwvucontrol
       qtscrcpy
