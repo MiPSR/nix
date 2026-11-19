@@ -14,6 +14,7 @@
       self.nixosModules.feature-laptop
       self.nixosModules.feature-osu-lazer
       self.nixosModules.feature-osu-stable
+      self.nixosModules.feature-flatpak
       self.nixosModules.feature-ssd
       self.nixosModules.feature-steam
       self.nixosModules.feature-user-kzk
