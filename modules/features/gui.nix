@@ -4,6 +4,7 @@
       alsa-utils
       darktable
       (discord.override { withVencord = true; })
+      pkgs."fluxer-canary-bin"
       fooyin
       google-chrome
       helix
@@ -68,9 +69,15 @@
       type = "fcitx5";
     };
 
-    security.rtkit.enable = true;
+    programs.appimage = {
+      enable = true;
+      binfmt = true;
+    };
 
+    security.rtkit.enable = true;
     services = {
+      flatpak.enable = true;
+
       pipewire = {
         alsa = {
           enable = true;

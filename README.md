@@ -84,7 +84,7 @@ osu! modules.
 
 ### PC: lana
 A PC configuration with the shared PC profile, AMD GPU support, VR, and both
-osu!stable and osu!lazer.
+osu!lazer.
 
 ### PC: ui
 A PC configuration for retro gaming, with AMD GPU support, Steam, VR and SSD

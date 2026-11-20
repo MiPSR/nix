@@ -6,7 +6,6 @@
     import-tree.url = "github:vic/import-tree";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
-    osu-stable-nixos.url = "github:MiPSR/osu-stable-nixos";
     super-simple-defaults.url = "github:MiPSR/super-simple-defaults";
     super-simple-booru-bot.url = "github:MiPSR/super-simple-booru-bot";
     roxysu = {
