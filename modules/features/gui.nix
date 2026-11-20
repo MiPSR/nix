@@ -17,6 +17,7 @@
       prismlauncher
       pwvucontrol
       qtscrcpy
+      signal-desktop
       stoat-desktop
       thunderbird-esr
       vesktop
