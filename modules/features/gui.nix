@@ -10,6 +10,7 @@
       google-chrome
       helix
       heroic
+      inputs.horizon.packages.x86_64-linux.horizon-launcher
       jdk
       krita
       librewolf

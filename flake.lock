@@ -18,6 +18,26 @@
         "type": "github"
       }
     },
+    "horizon": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795280630,
+        "narHash": "sha256-lQJCLI8xsgE1ZJ4QkvtwhZhqiEp3VhjrHg+e2Mzttvo=",
+        "owner": "horizon-rust",
+        "repo": "horizon",
+        "rev": "d60fd9bc580862d2ceed47523f4961b86a13ce4c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "horizon-rust",
+        "repo": "horizon",
+        "type": "github"
+      }
+    },
     "import-tree": {
       "locked": {
         "lastModified": 1788467110,
@@ -128,6 +148,7 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
+        "horizon": "horizon",
         "import-tree": "import-tree",
         "nixpkgs": "nixpkgs",
         "roxysu": "roxysu",
