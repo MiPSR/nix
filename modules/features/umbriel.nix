@@ -19,6 +19,7 @@
             border_width = 4;
             drag_opacity = 0.8;
             title_bar = {
+              buttons = [ "minimize" "close" ];
               mode = "forced";
               height = 24;
             };
