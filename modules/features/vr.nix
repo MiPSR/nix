@@ -8,15 +8,12 @@
       wayvr
     ];
 
-    # Ports and avahi publishing are opened/configured by the service itself
     services.wivrn = {
       enable = true;
       openFirewall = true;
 
-      # CAP_SYS_NICE, for asynchronous reprojection
       highPriority = true;
 
-      # Steam OpenXR discovery
       steam.importOXRRuntimes = true;
       steam.package = pkgs.steam;
 
@@ -28,7 +25,6 @@
           encoder = "vaapi";
         };
         tcp-only = true;
-        # hostname unset: WiVRn defaults to the system hostname
       };
     };
   };
