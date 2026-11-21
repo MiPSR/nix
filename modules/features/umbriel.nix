@@ -15,6 +15,23 @@
             };
           };
 
+          appearance = {
+            border_width = 4;
+            drag_opacity = 0.8;
+            title_bar = {
+              mode = "forced";
+              height = 24;
+            };
+            shadow.enabled = false;
+          };
+
+          layout = {
+            mode = "scrolling";
+            gap = 4;
+          };
+
+          animation.enabled = false;
+
           environment = {
             XCURSOR_SIZE = "24";
             XCURSOR_THEME = "Bibata-Modern-Ice";
