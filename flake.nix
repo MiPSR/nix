@@ -12,6 +12,10 @@
     wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
     super-simple-defaults.url = "github:MiPSR/super-simple-defaults";
     super-simple-booru-bot.url = "github:MiPSR/super-simple-booru-bot";
+    super-simple-theme-enforcer = {
+      url = "github:MiPSR/super-simple-theme-enforcer";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     roxysu = {
       url = "github:Yon-Luc/Roxysu";
       inputs.nixpkgs.follows = "nixpkgs";
