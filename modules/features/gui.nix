@@ -2,6 +2,7 @@
   flake.nixosModules.feature-gui = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       alsa-utils
+      anomaly-hex
       darktable
       (discord.override { withVencord = true; })
       pkgs."fluxer-canary-bin"
