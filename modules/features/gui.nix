@@ -24,6 +24,7 @@
       thunderbird-esr
       vesktop
       wlr-randr
+      inputs.super-simple-randr.packages.x86_64-linux.default
       inputs.super-simple-defaults.packages.x86_64-linux.default
       inputs.super-simple-theme-enforcer.packages.x86_64-linux.default
     ];

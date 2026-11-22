@@ -154,6 +154,7 @@
         "roxysu": "roxysu",
         "super-simple-booru-bot": "super-simple-booru-bot",
         "super-simple-defaults": "super-simple-defaults",
+        "super-simple-randr": "super-simple-randr",
         "super-simple-theme-enforcer": "super-simple-theme-enforcer",
         "wrapper-modules": "wrapper-modules"
       }
@@ -212,6 +213,26 @@
       "original": {
         "owner": "MiPSR",
         "repo": "super-simple-defaults",
+        "type": "github"
+      }
+    },
+    "super-simple-randr": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795369966,
+        "narHash": "sha256-2B7mPog6MIryTkSmZpb9NaHU1/1+BIhxNL9Np4Sy+ZI=",
+        "owner": "MiPSR",
+        "repo": "super-simple-wlr-randr-gui",
+        "rev": "a3d06b261adc3eae92fab7ea22f6a3e26e330246",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MiPSR",
+        "repo": "super-simple-wlr-randr-gui",
         "type": "github"
       }
     },
