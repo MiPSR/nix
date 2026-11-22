@@ -13,7 +13,6 @@
       ({ pkgs, ... }: {
         environment.systemPackages = with pkgs; [
           alcom
-          unityhub
         ];
       })
       self.nixosModules.feature-amdgpu
