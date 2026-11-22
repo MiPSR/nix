@@ -10,6 +10,12 @@
         };
         system.stateVersion = "26.05";
       }
+      ({ pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+          alcom
+          unityhub
+        ];
+      })
       self.nixosModules.feature-amdgpu
       self.nixosModules.feature-laptop
       self.nixosModules.feature-osu-lazer
