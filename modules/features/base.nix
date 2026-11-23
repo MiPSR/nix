@@ -69,10 +69,14 @@
       networkmanager.enable = true;
     };
 
-    nix.settings.experimental-features = [
-      "flakes"
-      "nix-command"
-    ];
+    nix.settings = {
+      cores = 1;
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
+      max-jobs = 1;
+    };
 
     nixpkgs.config.allowUnfree = true;
 
